@@ -42,13 +42,9 @@ class LoginActivity : AppCompatActivity() {
     private fun login() {
         if (validateLogin()) {
             Toast.makeText(this, "로그인에 성공했습니다", Toast.LENGTH_SHORT).show()
-            // 맞다 정보 보내야 한다..
             Intent(this, MainActivity::class.java)
                 .putExtra("data", data)
                 .apply { startActivity(this) }
-
-            /*startActivity(Intent(this, MainActivity::class.java)
-                .putExtra("data", data))*/
 
         } else Toast.makeText(this, "로그인에 실패했습니다", Toast.LENGTH_SHORT).show()
     }
