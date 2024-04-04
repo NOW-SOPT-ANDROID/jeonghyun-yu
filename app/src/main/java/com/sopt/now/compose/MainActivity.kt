@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,7 +44,6 @@ class MainActivity : ComponentActivity() {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
                             intent.getSerializableExtra("userData", SignUpData::class.java)!!
                         else intent.getSerializableExtra("userData") as SignUpData
-                    Log.d("olivia main", userData.toString())
                     showMain(userData)
                 }
             }
@@ -69,7 +69,7 @@ fun showMain(userData: SignUpData) {
 
         Spacer(modifier = Modifier.height(30.dp))
         Text(
-            text = "MBTI",
+            text = stringResource(R.string.mbti),
             fontSize = 20.sp
         )
         Text(
@@ -79,7 +79,7 @@ fun showMain(userData: SignUpData) {
 
         Spacer(modifier = Modifier.height(30.dp))
         Text(
-            text = "ID",
+            text = stringResource(R.string.id),
             fontSize = 20.sp
         )
         Text(
@@ -89,7 +89,7 @@ fun showMain(userData: SignUpData) {
 
         Spacer(modifier = Modifier.height(30.dp))
         Text(
-            text = "Password",
+            text = stringResource(R.string.password),
             fontSize = 20.sp
         )
         Text(

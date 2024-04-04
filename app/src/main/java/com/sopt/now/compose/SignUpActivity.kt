@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,7 +47,7 @@ class SignUpActivity : ComponentActivity() {
                 ) {
                     showSignup(onSignupBtnClicked = { id, password, nickname, mbti ->
                         val data = SignUpData(id, password, nickname, mbti)
-                        Toast.makeText(this, "회원가입 성공", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, R.string.success_signup, Toast.LENGTH_SHORT).show()
                         Intent(this, LoginActivity::class.java).apply {
                             putExtra("userData", data)
                             setResult(RESULT_OK, this)
@@ -75,7 +76,7 @@ fun showSignup(
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            text = "Sign Up",
+            text = stringResource(R.string.sign_up),
             fontSize = 30.sp,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -84,7 +85,7 @@ fun showSignup(
         Spacer(modifier = Modifier.weight(1f))
 
         Text(
-            text = "ID",
+            text = stringResource(R.string.id),
             fontSize = 20.sp,
             color = Color.Black
         )
@@ -92,14 +93,14 @@ fun showSignup(
         TextField(
             value = id,
             onValueChange = { id = it },
-            placeholder = { Text(text = "아이디를 입력해주세요") },
+            placeholder = { Text(text = stringResource(R.string.input_id)) },
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.size(30.dp))
 
         Text(
-            text = "비밀번호",
+            text = stringResource(R.string.password),
             fontSize = 20.sp,
             color = Color.Black
         )
@@ -107,7 +108,7 @@ fun showSignup(
         TextField(
             value = password,
             onValueChange = { password = it },
-            placeholder = { Text(text = "비밀번호를 입력해주세요") },
+            placeholder = { Text(text = stringResource(R.string.input_password)) },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword)
@@ -116,7 +117,7 @@ fun showSignup(
         Spacer(modifier = Modifier.size(30.dp))
 
         Text(
-            text = "닉네임",
+            text = stringResource(R.string.nickname),
             fontSize = 20.sp,
             color = Color.Black
         )
@@ -124,14 +125,14 @@ fun showSignup(
         TextField(
             value = nickname,
             onValueChange = { nickname = it },
-            placeholder = { Text(text = "닉네임을 입력해주세요") },
+            placeholder = { Text(text = stringResource(R.string.input_nickname)) },
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.size(30.dp))
 
         Text(
-            text = "MBTI",
+            text = stringResource(R.string.mbti),
             fontSize = 20.sp,
             color = Color.Black
         )
@@ -139,7 +140,7 @@ fun showSignup(
         TextField(
             value = mbti,
             onValueChange = { mbti = it },
-            placeholder = { Text(text = "MBTI를 입력해주세요") },
+            placeholder = { Text(text = stringResource(R.string.input_mbti)) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -150,7 +151,9 @@ fun showSignup(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "회원가입 하기")
+            Text(
+                text = stringResource(R.string.new_sign_up)
+            )
         }
     }
 }
@@ -159,6 +162,6 @@ fun showSignup(
 @Composable
 fun SignupPreview() {
     NOWSOPTAndroidTheme {
-        showSignup(onSignupBtnClicked = { id, password, nickname, mbti -> })
+        showSignup(onSignupBtnClicked = { _, _, _, _ -> })
     }
 }

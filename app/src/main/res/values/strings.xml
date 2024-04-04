@@ -2,4 +2,22 @@
     <string name="app_name">NOW SOPT Android</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
+
+    <!-- sign up -->
+    <string name="new_sign_up">회원가입 하기</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="input_id">아이디를 입력해주세요</string>
+    <string name="id">ID</string>
+    <string name="input_password">비밀번호를 입력해주세요</string>
+    <string name="password">비밀번호</string>
+    <string name="input_nickname">닉네임을 입력해주세요</string>
+    <string name="nickname">닉네임</string>
+    <string name="input_mbti">MBTI를 입력해주세요</string>
+    <string name="mbti">MBTI</string>
+    <string name="success_signup">회원가입 성공</string>
+
+    <!-- login -->
+    <string name="welcome_to_sopt">Welcome to SOPT</string>
+    <string name="login">로그인 하기</string>
+
 </resources>
