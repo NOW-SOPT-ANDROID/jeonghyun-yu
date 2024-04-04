@@ -2,7 +2,6 @@ package com.sopt.now.compose
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -36,6 +35,8 @@ import androidx.compose.ui.unit.sp
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class SignUpActivity : ComponentActivity() {
+    lateinit var userData: SignUpData
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -46,18 +47,62 @@ class SignUpActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     showSignup(onSignupBtnClicked = { id, password, nickname, mbti ->
-                        val data = SignUpData(id, password, nickname, mbti)
-                        Toast.makeText(this, R.string.success_signup, Toast.LENGTH_SHORT).show()
-                        Intent(this, LoginActivity::class.java).apply {
-                            putExtra("userData", data)
-                            setResult(RESULT_OK, this)
+                        userData = SignUpData(id, password, nickname, mbti)
+                        if (validateSignup()) {
+                            showToast(R.string.success_signup)
+                            navigateToLogin()
+                            finish()
                         }
-                        finish()
                     })
                 }
             }
         }
     }
+
+    private fun navigateToLogin() {
+        Intent(this, LoginActivity::class.java).apply {
+            putExtra("userData", userData)
+            setResult(RESULT_OK, this)
+        }
+    }
+
+    private fun validateSignup(): Boolean =
+        validateId() && validatePassword() && validateNickname() && validateMBTI()
+
+    private fun validateId(): Boolean {
+        require(userData.id.length in 6..10) {
+            showToast(R.string.fail_sign_up_id)
+            return false
+        }
+        return true
+    }
+
+    private fun validatePassword(): Boolean {
+        require(userData.password.length in 8..10) {
+            showToast(R.string.fail_sign_up_password)
+            return false
+        }
+        return true
+    }
+
+    private fun validateNickname(): Boolean {
+        require(userData.nickname.trim().isNotEmpty()) {
+            showToast(R.string.fail_sign_up_nickname)
+            return false
+        }
+        return true
+    }
+
+    private fun validateMBTI(): Boolean {
+        require(userData.mbti.length == 4) {
+            showToast(R.string.fail_sign_up_mbti)
+            return false
+        }
+        return true
+    }
+
+    private fun showToast(message: Int) =
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
 @Composable

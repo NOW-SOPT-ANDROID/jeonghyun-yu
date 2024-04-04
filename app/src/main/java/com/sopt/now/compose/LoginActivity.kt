@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResult
@@ -40,13 +41,13 @@ import androidx.compose.ui.unit.sp
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class LoginActivity : ComponentActivity() {
-    private lateinit var data: SignUpData
+    private lateinit var userData: SignUpData
 
     private val signupLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
         if (it.resultCode == RESULT_OK) {
-            data = getUserData(it)
+            userData = getUserData(it)
         }
     }
 
@@ -66,8 +67,8 @@ class LoginActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     ShowLogin(
-                        onLoginBtnClicked = {
-                            navigateToMain()
+                        onLoginBtnClicked = { id, password ->
+                            navigateToMain(id, password)
                         },
                         onSignupBtnClicked = {
                             navigateToSignup()
@@ -81,20 +82,25 @@ class LoginActivity : ComponentActivity() {
     private fun navigateToSignup() =
         Intent(this, SignUpActivity::class.java).let { signupLauncher.launch(it) }
 
-    private fun navigateToMain() {
-        Intent(this, MainActivity::class.java)
-            .putExtra("userData", data)
-            .apply { startActivity(this) }
-        /*Intent(this, MainActivity::class.java).apply {
-            putExtra("userData", data)
-        }.let { startActivity(it) }*/
+    private fun navigateToMain(id: String, password: String) {
+        if (validateLogin(id, password)) {
+            Intent(this, MainActivity::class.java)
+                .putExtra("userData", userData)
+                .apply { startActivity(this) }
+            /*Intent(this, MainActivity::class.java).apply {
+                putExtra("userData", data)
+            }.let { startActivity(it) }*/
+        } else Toast.makeText(this, R.string.fail_login, Toast.LENGTH_SHORT).show()
     }
+
+    private fun validateLogin(id: String, password: String): Boolean =
+        id == userData.id && password == userData.password
 
 }
 
 @Composable
 fun ShowLogin(
-    onLoginBtnClicked: () -> Unit,
+    onLoginBtnClicked: (String, String) -> Unit,
     onSignupBtnClicked: () -> Unit
 ) {
     var id by remember { mutableStateOf("") }
@@ -148,7 +154,7 @@ fun ShowLogin(
         Spacer(modifier = Modifier.weight(5f))
 
         Button(
-            onClick = onLoginBtnClicked,
+            onClick = { onLoginBtnClicked(id, password) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = stringResource(R.string.login))
@@ -171,7 +177,7 @@ fun ShowLogin(
 fun LoginPreview() {
     NOWSOPTAndroidTheme {
         ShowLogin(
-            onLoginBtnClicked = {},
+            onLoginBtnClicked = { _, _ -> },
             onSignupBtnClicked = {}
         )
     }
