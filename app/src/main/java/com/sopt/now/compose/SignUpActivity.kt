@@ -37,10 +37,11 @@ import com.sopt.now.compose.Constants.Companion.MAX_PASSWORD_LENGTH
 import com.sopt.now.compose.Constants.Companion.MBTI_LENGTH
 import com.sopt.now.compose.Constants.Companion.MIN_ID_LENGTH
 import com.sopt.now.compose.Constants.Companion.MIN_PASSWORD_LENGTH
+import com.sopt.now.compose.Constants.Companion.USER_DATA
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class SignUpActivity : ComponentActivity() {
-    lateinit var userData: SignUpData
+    private lateinit var userData: SignUpData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +67,7 @@ class SignUpActivity : ComponentActivity() {
 
     private fun navigateToLogin() {
         Intent(this, LoginActivity::class.java).apply {
-            putExtra("userData", userData)
+            putExtra(USER_DATA, userData)
             setResult(RESULT_OK, this)
         }
     }

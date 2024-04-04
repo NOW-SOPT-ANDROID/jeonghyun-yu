@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sopt.now.compose.Constants.Companion.USER_DATA
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,8 +45,8 @@ class MainActivity : ComponentActivity() {
 
     private fun getUserData(): SignUpData {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            intent.getSerializableExtra("userData", SignUpData::class.java)!!
-        else intent.getSerializableExtra("userData") as SignUpData
+            intent.getParcelableExtra(USER_DATA, SignUpData::class.java)!!
+        else intent.getParcelableExtra(USER_DATA)!!
     }
 }
 

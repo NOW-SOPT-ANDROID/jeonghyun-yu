@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sopt.now.compose.Constants.Companion.USER_DATA
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class LoginActivity : ComponentActivity() {
@@ -53,8 +54,8 @@ class LoginActivity : ComponentActivity() {
 
     private fun getUserData(it: ActivityResult): SignUpData {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            it.data?.getSerializableExtra("userData", SignUpData::class.java)!!
-        else it.data?.getSerializableExtra("userData") as SignUpData
+            it.data?.getParcelableExtra(USER_DATA, SignUpData::class.java)!!
+        else it.data?.getParcelableExtra(USER_DATA)!!
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,15 +83,15 @@ class LoginActivity : ComponentActivity() {
     private fun navigateToSignup() =
         Intent(this, SignUpActivity::class.java).let { signupLauncher.launch(it) }
 
+    private fun navigateToMain() {
+        Intent(this, MainActivity::class.java).apply {
+            putExtra(USER_DATA, userData)
+        }.let { startActivity(it) }
+    }
+
     private fun navigateToMain(id: String, password: String) {
-        if (validateLogin(id, password)) {
-            Intent(this, MainActivity::class.java)
-                .putExtra("userData", userData)
-                .apply { startActivity(this) }
-            /*Intent(this, MainActivity::class.java).apply {
-                putExtra("userData", data)
-            }.let { startActivity(it) }*/
-        } else Toast.makeText(this, R.string.fail_login, Toast.LENGTH_SHORT).show()
+        if (validateLogin(id, password)) navigateToMain()
+        else Toast.makeText(this, R.string.fail_login, Toast.LENGTH_SHORT).show()
     }
 
     private fun validateLogin(id: String, password: String): Boolean =
