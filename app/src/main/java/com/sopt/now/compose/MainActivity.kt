@@ -35,18 +35,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    userData = getUserData(this.intent)
+                    userData = getUserData()
                     showMain(userData)
                 }
             }
         }
     }
-}
 
-fun getUserData(intent: Intent): SignUpData {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-        intent.getSerializableExtra("userData", SignUpData::class.java)!!
-    else intent.getSerializableExtra("userData") as SignUpData
+    private fun getUserData(): SignUpData {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            intent.getSerializableExtra("userData", SignUpData::class.java)!!
+        else intent.getSerializableExtra("userData") as SignUpData
+    }
 }
 
 @Composable

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -45,11 +46,14 @@ class LoginActivity : ComponentActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) {
         if (it.resultCode == RESULT_OK) {
-            data =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                    it.data?.getSerializableExtra("userData", SignUpData::class.java)!!
-                else it.data?.getSerializableExtra("userData") as SignUpData
+            data = getUserData(it)
         }
+    }
+
+    private fun getUserData(it: ActivityResult): SignUpData {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            it.data?.getSerializableExtra("userData", SignUpData::class.java)!!
+        else it.data?.getSerializableExtra("userData") as SignUpData
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,23 +67,29 @@ class LoginActivity : ComponentActivity() {
                 ) {
                     ShowLogin(
                         onLoginBtnClicked = {
-                            Intent(this, MainActivity::class.java)
-                                .putExtra("userData", data)
-                                .apply { startActivity(this) }
-                            /*Intent(this, MainActivity::class.java).apply {
-                                putExtra("userData", data)
-                            }.let { startActivity(it) }*/
+                            navigateToMain()
                         },
                         onSignupBtnClicked = {
-                            Intent(this, SignUpActivity::class.java).let {
-                                signupLauncher.launch(it)
-                            }
+                            navigateToSignup()
                         }
                     )
                 }
             }
         }
     }
+
+    private fun navigateToSignup() =
+        Intent(this, SignUpActivity::class.java).let { signupLauncher.launch(it) }
+
+    private fun navigateToMain() {
+        Intent(this, MainActivity::class.java)
+            .putExtra("userData", data)
+            .apply { startActivity(this) }
+        /*Intent(this, MainActivity::class.java).apply {
+            putExtra("userData", data)
+        }.let { startActivity(it) }*/
+    }
+
 }
 
 @Composable
