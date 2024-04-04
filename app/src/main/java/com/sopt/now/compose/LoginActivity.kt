@@ -1,8 +1,12 @@
 package com.sopt.now.compose
 
+import android.app.Activity
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +30,19 @@ import androidx.compose.ui.unit.sp
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class LoginActivity : ComponentActivity() {
+    private var data: SignUpData? = null
+
+    private val signupLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == RESULT_OK) {
+            data =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                    it.data?.getSerializableExtra("data", SignUpData::class.java)
+                else it.data?.getSerializableExtra("data") as SignUpData
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -35,7 +52,19 @@ class LoginActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ShowLogin()
+                    ShowLogin(
+                        onLoginBtnClicked = {
+                            Intent(this, MainActivity::class.java).apply {
+                                putExtra("data", data)
+                                startActivity(this)
+                            }
+                        },
+                        onSignupBtnClicked = {
+                            Intent(this, SignUpActivity::class.java).let {
+                                signupLauncher.launch(it)
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -43,7 +72,10 @@ class LoginActivity : ComponentActivity() {
 }
 
 @Composable
-fun ShowLogin() {
+fun ShowLogin(
+    onLoginBtnClicked: () -> Unit,
+    onSignupBtnClicked: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -88,7 +120,7 @@ fun ShowLogin() {
         Spacer(modifier = Modifier.weight(5f))
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = onLoginBtnClicked,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "로그인 하기")
@@ -97,7 +129,7 @@ fun ShowLogin() {
         Spacer(modifier = Modifier.size(10.dp))
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = onSignupBtnClicked,
             modifier = Modifier
                 .fillMaxWidth()
         ) {
@@ -110,6 +142,9 @@ fun ShowLogin() {
 @Composable
 fun LoginPreview() {
     NOWSOPTAndroidTheme {
-        ShowLogin()
+        ShowLogin(
+            onLoginBtnClicked = {},
+            onSignupBtnClicked = {}
+        )
     }
 }
