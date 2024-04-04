@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -98,8 +99,9 @@ fun ShowLogin(
         )
         Spacer(modifier = Modifier.size(10.dp))
         TextField(
-            value = "아이디를 입력해주세요",
+            value = "",
             onValueChange = {},
+            placeholder = { Text(text = "아이디를 입력해주세요")},
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -112,8 +114,9 @@ fun ShowLogin(
         )
         Spacer(modifier = Modifier.size(10.dp))
         TextField(
-            value = "비밀번호를 입력해주세요",
+            value = "",
             onValueChange = {},
+            placeholder = { Text(text = "비밀번호를 입력해주세요")},
             modifier = Modifier.fillMaxWidth()
         )
 
