@@ -32,6 +32,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sopt.now.compose.Constants.Companion.MAX_ID_LENGTH
+import com.sopt.now.compose.Constants.Companion.MAX_PASSWORD_LENGTH
+import com.sopt.now.compose.Constants.Companion.MBTI_LENGTH
+import com.sopt.now.compose.Constants.Companion.MIN_ID_LENGTH
+import com.sopt.now.compose.Constants.Companion.MIN_PASSWORD_LENGTH
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class SignUpActivity : ComponentActivity() {
@@ -70,7 +75,7 @@ class SignUpActivity : ComponentActivity() {
         validateId() && validatePassword() && validateNickname() && validateMBTI()
 
     private fun validateId(): Boolean {
-        require(userData.id.length in 6..10) {
+        require(userData.id.length in MIN_ID_LENGTH..MAX_ID_LENGTH) {
             showToast(R.string.fail_sign_up_id)
             return false
         }
@@ -78,7 +83,7 @@ class SignUpActivity : ComponentActivity() {
     }
 
     private fun validatePassword(): Boolean {
-        require(userData.password.length in 8..10) {
+        require(userData.password.length in MIN_PASSWORD_LENGTH..MAX_PASSWORD_LENGTH) {
             showToast(R.string.fail_sign_up_password)
             return false
         }
@@ -94,7 +99,7 @@ class SignUpActivity : ComponentActivity() {
     }
 
     private fun validateMBTI(): Boolean {
-        require(userData.mbti.length == 4) {
+        require(userData.mbti.length == MBTI_LENGTH) {
             showToast(R.string.fail_sign_up_mbti)
             return false
         }
