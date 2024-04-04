@@ -48,7 +48,7 @@ class SignUpActivity : ComponentActivity() {
                         val data = SignUpData(id, password, nickname, mbti)
                         Toast.makeText(this, "회원가입 성공", Toast.LENGTH_SHORT).show()
                         Intent(this, LoginActivity::class.java).apply {
-                            putExtra("data", data)
+                            putExtra("userData", data)
                             setResult(RESULT_OK, this)
                         }
                         finish()

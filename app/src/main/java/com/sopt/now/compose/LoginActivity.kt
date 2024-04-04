@@ -21,6 +21,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class LoginActivity : ComponentActivity() {
-    private var data: SignUpData? = null
+    private lateinit var data: SignUpData
 
     private val signupLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -39,8 +43,8 @@ class LoginActivity : ComponentActivity() {
         if (it.resultCode == RESULT_OK) {
             data =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                    it.data?.getSerializableExtra("data", SignUpData::class.java)
-                else it.data?.getSerializableExtra("data") as SignUpData
+                    it.data?.getSerializableExtra("userData", SignUpData::class.java)!!
+                else it.data?.getSerializableExtra("userData") as SignUpData
         }
     }
 
@@ -55,10 +59,12 @@ class LoginActivity : ComponentActivity() {
                 ) {
                     ShowLogin(
                         onLoginBtnClicked = {
-                            Intent(this, MainActivity::class.java).apply {
-                                putExtra("data", data)
-                                startActivity(this)
-                            }
+                            Intent(this, MainActivity::class.java)
+                                .putExtra("userData", data)
+                                .apply { startActivity(this) }
+                            /*Intent(this, MainActivity::class.java).apply {
+                                putExtra("userData", data)
+                            }.let { startActivity(it) }*/
                         },
                         onSignupBtnClicked = {
                             Intent(this, SignUpActivity::class.java).let {
@@ -77,6 +83,9 @@ fun ShowLogin(
     onLoginBtnClicked: () -> Unit,
     onSignupBtnClicked: () -> Unit
 ) {
+    var id by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -99,9 +108,9 @@ fun ShowLogin(
         )
         Spacer(modifier = Modifier.size(10.dp))
         TextField(
-            value = "",
-            onValueChange = {},
-            placeholder = { Text(text = "아이디를 입력해주세요")},
+            value = id,
+            onValueChange = { id = it },
+            placeholder = { Text(text = "아이디를 입력해주세요") },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -114,9 +123,9 @@ fun ShowLogin(
         )
         Spacer(modifier = Modifier.size(10.dp))
         TextField(
-            value = "",
-            onValueChange = {},
-            placeholder = { Text(text = "비밀번호를 입력해주세요")},
+            value = password,
+            onValueChange = { password = it },
+            placeholder = { Text(text = "비밀번호를 입력해주세요") },
             modifier = Modifier.fillMaxWidth()
         )
 

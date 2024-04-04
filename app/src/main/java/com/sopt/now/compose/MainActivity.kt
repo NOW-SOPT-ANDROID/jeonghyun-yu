@@ -1,18 +1,34 @@
 package com.sopt.now.compose
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class MainActivity : ComponentActivity() {
+    private lateinit var userData: SignUpData
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -22,7 +38,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    //showMain()
+                    userData =
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                            intent.getSerializableExtra("userData", SignUpData::class.java)!!
+                        else intent.getSerializableExtra("userData") as SignUpData
+                    Log.d("olivia main", userData.toString())
+                    showMain(userData)
                 }
             }
         }
@@ -30,17 +52,57 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun showMain(userData: SignUpData) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(30.dp)
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = "${userData.id}",
+            fontSize = 30.sp,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally),
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(30.dp))
+        Text(
+            text = "MBTI",
+            fontSize = 20.sp
+        )
+        Text(
+            text = "${userData.mbti}",
+            fontSize = 15.sp
+        )
+
+        Spacer(modifier = Modifier.height(30.dp))
+        Text(
+            text = "ID",
+            fontSize = 20.sp
+        )
+        Text(
+            text = "${userData.id}",
+            fontSize = 15.sp
+        )
+
+        Spacer(modifier = Modifier.height(30.dp))
+        Text(
+            text = "Password",
+            fontSize = 20.sp
+        )
+        Text(
+            text = "${userData.password}",
+            fontSize = 15.sp
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun MainPreview() {
     NOWSOPTAndroidTheme {
-        Greeting("Android")
+        showMain(userData = SignUpData("id","password", "nickname", "mbti"))
     }
 }
