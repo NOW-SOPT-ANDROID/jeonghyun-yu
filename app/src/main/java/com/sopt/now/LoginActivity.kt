@@ -6,21 +6,21 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.sopt.now.Constants.Companion.USER_DATA
 import com.sopt.now.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
-    private var data: SignUpData? = null
+    private var userData: SignUpData? = null
 
     private val signupLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
-        val isSignup = it.data?.getBooleanExtra("isSignup", false) ?: false
-        if (it.resultCode == RESULT_OK && isSignup) {
-            data =
+        if (it.resultCode == RESULT_OK) {
+            userData =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                    it.data?.getSerializableExtra("data", SignUpData::class.java)
-                else it.data?.getSerializableExtra("data") as SignUpData
+                    it.data?.getParcelableExtra(USER_DATA, SignUpData::class.java)
+                else it.data?.getParcelableExtra(USER_DATA)
         }
     }
 
@@ -41,15 +41,17 @@ class LoginActivity : AppCompatActivity() {
 
     private fun login() {
         if (validateLogin()) {
-            Toast.makeText(this, "로그인에 성공했습니다", Toast.LENGTH_SHORT).show()
-            Intent(this, MainActivity::class.java)
-                .putExtra("data", data)
-                .apply { startActivity(this) }
-
-        } else Toast.makeText(this, "로그인에 실패했습니다", Toast.LENGTH_SHORT).show()
+            showToast(R.string.success_login)
+            Intent(this, MainActivity::class.java).apply {
+                putExtra(USER_DATA, userData)
+                startActivity(this)
+            }
+        } else showToast(R.string.fail_login)
     }
 
     private fun validateLogin(): Boolean =
-        data?.id == binding.etLoginId.text.toString() && data?.password == binding.etLoginPw.text.toString()
+        userData?.id == binding.etLoginId.text.toString() && userData?.password == binding.etLoginPw.text.toString()
 
+    private fun showToast(message: Int) =
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }

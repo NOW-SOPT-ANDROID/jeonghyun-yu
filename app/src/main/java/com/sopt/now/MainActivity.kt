@@ -4,12 +4,13 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.sopt.now.Constants.Companion.USER_DATA
 import com.sopt.now.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var data: SignUpData? = null
+    private var userData: SignUpData? = null
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,23 +19,23 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        data = getUserInfo()
+        userData = getUserInfo()
         showUserInfo()
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun getUserInfo() : SignUpData?{
+    private fun getUserInfo(): SignUpData? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            intent.getSerializableExtra("data", SignUpData::class.java)
-        else intent.getSerializableExtra("data") as SignUpData
+            intent.getParcelableExtra(USER_DATA, SignUpData::class.java)
+        else intent.getParcelableExtra(USER_DATA)
     }
 
     private fun showUserInfo() {
         with(binding) {
-            tvMainUserNickname.text = data?.nickname
-            tvMainUserMbti.text = data?.mbti
-            tvMainUserId.text = data?.id
-            tvMainUserPw.text = data?.password
+            tvMainUserNickname.text = userData?.nickname
+            tvMainUserMbti.text = userData?.mbti
+            tvMainUserId.text = userData?.id
+            tvMainUserPw.text = userData?.password
         }
     }
 }

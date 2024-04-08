@@ -17,4 +17,11 @@
     <string name="mbti">MBTI</string>
     <string name="mbti_hint">MBTI를 입력해주세요</string>
 
+    <string name="fail_sign_up_id">ID는 6글자 이상 10글자 이내로 작성해주세요</string>
+    <string name="fail_sign_up_password">비밀번호는 8글자 이상 12글자 이내로 작성해주세요</string>
+    <string name="fail_sign_up_nickname">닉네임은 한 글자 이상이어야 합니다</string>
+    <string name="fail_sign_up_mbti">16가지 MBTI유형 중 해당되는 것을 작성해주세요</string>
+    <string name="success_signup">회원가입 성공</string>
+    <string name="success_login">로그인 성공</string>
+    <string name="fail_login">로그인 실패</string>
 </resources>
