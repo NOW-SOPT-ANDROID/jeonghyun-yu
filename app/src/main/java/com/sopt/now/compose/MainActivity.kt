@@ -25,7 +25,7 @@ import com.sopt.now.compose.Constants.Companion.USER_DATA
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class MainActivity : ComponentActivity() {
-    private lateinit var userData: SignUpData
+    private var userData: SignUpData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,15 +43,20 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun getUserData(): SignUpData {
+    private fun getUserData(): SignUpData? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            intent.getParcelableExtra(USER_DATA, SignUpData::class.java)!!
+            intent.getParcelableExtra(USER_DATA, SignUpData::class.java)
         else intent.getParcelableExtra(USER_DATA)!!
     }
 }
 
 @Composable
-fun showMain(userData: SignUpData) {
+private fun customText(text: String, fontSize: Int) {
+    Text(text = text, fontSize = fontSize.sp)
+}
+
+@Composable
+fun showMain(userData: SignUpData?) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -59,7 +64,7 @@ fun showMain(userData: SignUpData) {
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            text = "${userData.id}",
+            text = "${userData?.id}",
             fontSize = 30.sp,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally),
@@ -67,34 +72,16 @@ fun showMain(userData: SignUpData) {
         )
 
         Spacer(modifier = Modifier.height(30.dp))
-        Text(
-            text = stringResource(R.string.mbti),
-            fontSize = 20.sp
-        )
-        Text(
-            text = "${userData.mbti}",
-            fontSize = 15.sp
-        )
+        customText(text = stringResource(R.string.mbti), fontSize = 20)
+        customText(text = "${userData?.mbti}", fontSize = 15)
 
         Spacer(modifier = Modifier.height(30.dp))
-        Text(
-            text = stringResource(R.string.id),
-            fontSize = 20.sp
-        )
-        Text(
-            text = "${userData.id}",
-            fontSize = 15.sp
-        )
+        customText(text = stringResource(R.string.id), fontSize = 20)
+        customText(text = "${userData?.id}", fontSize = 15)
 
         Spacer(modifier = Modifier.height(30.dp))
-        Text(
-            text = stringResource(R.string.password),
-            fontSize = 20.sp
-        )
-        Text(
-            text = "${userData.password}",
-            fontSize = 15.sp
-        )
+        customText(text = stringResource(R.string.password), fontSize = 20)
+        customText(text = "${userData?.password}", fontSize = 15)
     }
 }
 
@@ -102,6 +89,6 @@ fun showMain(userData: SignUpData) {
 @Composable
 fun MainPreview() {
     NOWSOPTAndroidTheme {
-        showMain(userData = SignUpData("id","password", "nickname", "mbti"))
+        showMain(userData = SignUpData("id", "password", "nickname", "mbti"))
     }
 }

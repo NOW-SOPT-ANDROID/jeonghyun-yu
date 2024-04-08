@@ -52,8 +52,8 @@ class SignUpActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    showSignup(onSignupBtnClicked = { id, password, nickname, mbti ->
-                        userData = SignUpData(id, password, nickname, mbti)
+                    showSignup(onSignupBtnClicked = {
+                        userData = SignUpData(it.id, it.password, it.nickname, it.mbti)
                         if (validateSignup()) {
                             showToast(R.string.success_signup)
                             navigateToLogin()
@@ -113,7 +113,7 @@ class SignUpActivity : ComponentActivity() {
 
 @Composable
 fun showSignup(
-    onSignupBtnClicked: (String, String, String, String) -> Unit
+    onSignupBtnClicked: (SignUpData) -> Unit
 ) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -198,7 +198,7 @@ fun showSignup(
         Spacer(modifier = Modifier.weight(5f))
 
         Button(
-            onClick = { onSignupBtnClicked(id, password, nickname, mbti) },
+            onClick = { onSignupBtnClicked(SignUpData(id, password, nickname, mbti)) },
             modifier = Modifier
                 .fillMaxWidth()
         ) {
@@ -213,6 +213,6 @@ fun showSignup(
 @Composable
 fun SignupPreview() {
     NOWSOPTAndroidTheme {
-        showSignup(onSignupBtnClicked = { _, _, _, _ -> })
+        showSignup(onSignupBtnClicked = { SignUpData -> })
     }
 }
