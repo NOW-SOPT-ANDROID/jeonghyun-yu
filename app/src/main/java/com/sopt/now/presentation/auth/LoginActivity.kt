@@ -1,4 +1,4 @@
-package com.sopt.now
+package com.sopt.now.presentation.auth
 
 import android.content.Intent
 import android.os.Build
@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.sopt.now.Constants.Companion.USER_DATA
+import com.sopt.now.utils.Constants.Companion.USER_DATA
+import com.sopt.now.presentation.main.MainActivity
+import com.sopt.now.R
+import com.sopt.now.data.SignUpData
 import com.sopt.now.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
