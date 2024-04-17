@@ -25,15 +25,9 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val friendAdapter = FriendAdapter(requireContext())
+        val friendAdapter = ProfileAdapter()
         binding.rvFriend.adapter = friendAdapter
         friendAdapter.setFriendList(viewModel.mockFriendList)
-
-        /*binding.rvFriend.run {
-            adapter = friendAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }*/
-        //friendAdapter.setFriendList(mockFriendList)
     }
 
     override fun onDestroyView() {

@@ -6,12 +6,11 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.sopt.now.R
-import com.sopt.now.data.SignUpData
+import com.sopt.now.model.SignUpData
 import com.sopt.now.databinding.ActivityMainBinding
 import com.sopt.now.presentation.main.home.HomeFragment
 import com.sopt.now.presentation.main.mypage.MyPageFragment
 import com.sopt.now.presentation.main.search.SearchFragment
-import com.sopt.now.utils.Constants
 import com.sopt.now.utils.Constants.Companion.USER_DATA
 
 

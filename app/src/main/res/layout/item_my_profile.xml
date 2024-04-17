@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_margin="10dp"
+        android:layout_margin="15dp"
         />
 
     <TextView
@@ -28,8 +28,20 @@
         app:layout_constraintTop_toTopOf="@id/iv_profile"
         app:layout_constraintBottom_toBottomOf="@id/iv_profile"
         app:layout_constraintStart_toEndOf="@id/iv_profile"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="15dp"
         android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="34기 YB 유정현입니다!"
+        app:layout_constraintTop_toTopOf="@id/iv_profile"
+        app:layout_constraintBottom_toBottomOf="@id/iv_profile"
+        app:layout_constraintEnd_toStartOf="@id/iv_right_arrow"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_marginEnd="10dp"/>
 
     <ImageView
         android:id="@+id/iv_right_arrow"

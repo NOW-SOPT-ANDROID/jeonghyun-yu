@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.sopt.now.data.SignUpData
+import com.sopt.now.model.SignUpData
 import com.sopt.now.databinding.FragmentMypageBinding
 import com.sopt.now.utils.Constants.Companion.USER_DATA
 

@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.sopt.now.utils.Constants.Companion.USER_DATA
 import com.sopt.now.presentation.main.MainActivity
 import com.sopt.now.R
-import com.sopt.now.data.SignUpData
+import com.sopt.now.model.SignUpData
 import com.sopt.now.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {

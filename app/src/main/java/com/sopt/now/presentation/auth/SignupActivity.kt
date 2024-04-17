@@ -11,7 +11,7 @@ import com.sopt.now.utils.Constants.Companion.MIN_ID_LENGTH
 import com.sopt.now.utils.Constants.Companion.MIN_PASSWORD_LENGTH
 import com.sopt.now.utils.Constants.Companion.USER_DATA
 import com.sopt.now.R
-import com.sopt.now.data.SignUpData
+import com.sopt.now.model.SignUpData
 import com.sopt.now.databinding.ActivitySignupBinding
 
 class SignupActivity : AppCompatActivity() {
