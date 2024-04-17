@@ -22,10 +22,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater).apply {
-            setContentView(root)
-        }
+        binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(root) }
 
+        clickBottomNavigation()
+        userData = getUserInfo()
+    }
+
+    private fun clickBottomNavigation() {
         val currentFragment = supportFragmentManager.findFragmentById(binding.fcvMain.id)
         if (currentFragment == null) {
             supportFragmentManager.beginTransaction()
@@ -33,21 +36,18 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        clickBottomNavigation()
-        userData = getUserInfo()
-    }
-
-    private fun clickBottomNavigation() {
         binding.bnvMain.setOnItemSelectedListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.menu_home -> {
                     replaceFragment(HomeFragment())
                     true
                 }
+
                 R.id.menu_search -> {
                     replaceFragment(SearchFragment())
                     true
                 }
+
                 R.id.menu_mypage -> {
                     replaceFragment(MyPageFragment().apply {
                         arguments = Bundle().apply {
@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
                     })
                     true
                 }
+
                 else -> false
             }
         }

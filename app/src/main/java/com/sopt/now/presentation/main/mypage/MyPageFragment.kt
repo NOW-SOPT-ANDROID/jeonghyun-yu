@@ -31,7 +31,6 @@ class MyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         userData = getUserInfo()
-        Log.d("olivia userData", userData.toString())
         showUserInfo()
     }
 
@@ -42,10 +41,9 @@ class MyPageFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun getUserInfo(): SignUpData? {
-        /*return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
             arguments?.getParcelable(USER_DATA, SignUpData::class.java)
-        else arguments?.getParcelable(USER_DATA)*/
-        return arguments?.getParcelable(USER_DATA)
+        else arguments?.getParcelable(USER_DATA)
     }
 
     private fun showUserInfo() {
