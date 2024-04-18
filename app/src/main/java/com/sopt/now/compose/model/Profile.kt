@@ -9,7 +9,7 @@ sealed class Profile {
         val description: String
     ): Profile()
 
-    data class FriedProfile(
+    data class FriendProfile(
         val username: String,
         @DrawableRes val img: Int
     ): Profile()
