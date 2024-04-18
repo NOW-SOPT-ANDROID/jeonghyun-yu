@@ -70,12 +70,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-@Composable
-private fun customText(text: String, fontSize: Int) {
-    Text(text = text, fontSize = fontSize.sp)
-}
-
 @Composable
 fun showMain(userData: SignUpData?) {
     var selectedItem by remember { mutableIntStateOf(0) }
@@ -125,40 +119,12 @@ fun showMain(userData: SignUpData?) {
                 }
 
                 2 -> {
-                    MyPageScreen()
+                    MyPageScreen(userData)
                 }
             }
         }
 
     }
-
-
-    /*Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(30.dp)
-    ) {
-        Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "${userData?.id}",
-            fontSize = 30.sp,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally),
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
-        customText(text = stringResource(R.string.mbti), fontSize = 20)
-        customText(text = "${userData?.mbti}", fontSize = 15)
-
-        Spacer(modifier = Modifier.height(30.dp))
-        customText(text = stringResource(R.string.id), fontSize = 20)
-        customText(text = "${userData?.id}", fontSize = 15)
-
-        Spacer(modifier = Modifier.height(30.dp))
-        customText(text = stringResource(R.string.password), fontSize = 20)
-        customText(text = "${userData?.password}", fontSize = 15)
-    }*/
 }
 
 @Preview(showBackground = true)
