@@ -13,4 +13,10 @@ sealed class Profile {
         val username: String,
         @DrawableRes val img: Int
     ): Profile()
+
+    data class FriendProfileWithMusic(
+        val username: String,
+        @DrawableRes val img: Int,
+        val music: String
+    ): Profile()
 }
