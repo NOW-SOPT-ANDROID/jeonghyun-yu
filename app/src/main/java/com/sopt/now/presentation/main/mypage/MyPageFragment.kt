@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.sopt.now.model.SignUpData
 import com.sopt.now.databinding.FragmentMypageBinding
+import com.sopt.now.model.SignUpData
 import com.sopt.now.utils.Constants.Companion.USER_DATA
 
 class MyPageFragment : Fragment() {
@@ -21,7 +21,7 @@ class MyPageFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -35,8 +35,8 @@ class MyPageFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        super.onDestroyView()
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
