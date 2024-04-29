@@ -24,4 +24,9 @@
     <string name="success_signup">회원가입 성공</string>
     <string name="success_login">로그인 성공</string>
     <string name="fail_login">로그인 실패</string>
+
+    <!-- Home -->
+    <string name="home">홈</string>
+    <string name="search">검색</string>
+    <string name="mypage">마이페이지</string>
 </resources>

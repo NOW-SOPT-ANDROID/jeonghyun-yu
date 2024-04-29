@@ -1,15 +1,17 @@
-package com.sopt.now
+package com.sopt.now.presentation.auth
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.sopt.now.Constants.Companion.MAX_ID_LENGTH
-import com.sopt.now.Constants.Companion.MAX_PASSWORD_LENGTH
-import com.sopt.now.Constants.Companion.MBTI_LENGTH
-import com.sopt.now.Constants.Companion.MIN_ID_LENGTH
-import com.sopt.now.Constants.Companion.MIN_PASSWORD_LENGTH
-import com.sopt.now.Constants.Companion.USER_DATA
+import com.sopt.now.utils.Constants.Companion.MAX_ID_LENGTH
+import com.sopt.now.utils.Constants.Companion.MAX_PASSWORD_LENGTH
+import com.sopt.now.utils.Constants.Companion.MBTI_LENGTH
+import com.sopt.now.utils.Constants.Companion.MIN_ID_LENGTH
+import com.sopt.now.utils.Constants.Companion.MIN_PASSWORD_LENGTH
+import com.sopt.now.utils.Constants.Companion.USER_DATA
+import com.sopt.now.R
+import com.sopt.now.model.SignUpData
 import com.sopt.now.databinding.ActivitySignupBinding
 
 class SignupActivity : AppCompatActivity() {
