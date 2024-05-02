@@ -1,6 +1,7 @@
 package com.sopt.now.presentation.auth
 
 import android.content.Intent
+import android.icu.lang.UCharacter.GraphemeClusterBreak.L
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -15,6 +16,7 @@ import com.sopt.now.databinding.ActivitySignupBinding
 import com.sopt.now.model.signup.RequestSignUpDto
 import com.sopt.now.model.signup.ResponseSignUpDto
 import com.sopt.now.utils.BaseResponse
+import com.sopt.now.utils.ServicePool
 import com.sopt.now.utils.ServicePool.authService
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,6 +24,7 @@ import retrofit2.Response
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
+    private val authService by lazy { ServicePool.authService }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +50,7 @@ class SignupActivity : AppCompatActivity() {
                 response: Response<ResponseSignUpDto>,
             ) {
                 if (response.isSuccessful) {
+                    Log.d("olivia success", "success")
                     val data: ResponseSignUpDto? = response.body()
                     val userId = response.headers()["location"]
 
@@ -57,14 +61,15 @@ class SignupActivity : AppCompatActivity() {
                     ).show()
                     Log.d("SignUp", "data: $data, userId: $userId")
 
-                    // 나는 81번
+                    // 나는 81번 0703olivia
                     if (validateSignup()) successSignUp(userId!!)
 
                 } else {
                     val error = response.message() // 에러 메세지가 안뜸
+                    Log.d("olivia error", error)
                     Toast.makeText(
                         this@SignupActivity,
-                        "로그인이 실패 $error",
+                        "회원가입 실패 $error",
                         Toast.LENGTH_SHORT,
                     ).show()
                 }
@@ -72,7 +77,8 @@ class SignupActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResponseSignUpDto>, t: Throwable) {
-                Toast.makeText(this@SignupActivity, "서버 에러 발생 ", Toast.LENGTH_SHORT).show()
+                Log.d("olivia server error", "error ${t.message}")
+                Toast.makeText(this@SignupActivity, "서버 에러 발생 t: ${t.message}", Toast.LENGTH_SHORT).show()
             }
 
 
@@ -80,13 +86,6 @@ class SignupActivity : AppCompatActivity() {
 
     }
 
-    /*private fun successSignUp(userData: SignUpData) {
-        Intent(this, LoginActivity::class.java).apply {
-            putExtra(USER_DATA, userData)
-            setResult(RESULT_OK, this)
-            finish()
-        }
-    }*/
 
     private fun successSignUp(userId: String) {
         Intent(this, LoginActivity::class.java).apply {
