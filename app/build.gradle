@@ -2,7 +2,12 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-parcelize'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0' // build.gradle project에서 확인 가능
 }
+
+// plugin{}과 andriod{} 사이
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream()) // baseUrl을 가져옴
 
 android {
     namespace 'com.sopt.now'
@@ -16,6 +21,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "AUTH_BASE_URL", properties["base.url"]
     }
 
     buildTypes {
@@ -33,6 +40,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        buildConfig true // build 할 때 buildConfig 파일이 만들어짐 -> 망치 이미지(build) 누르기!!
     }
 }
 
@@ -52,5 +60,18 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.6.1"
     implementation "androidx.activity:activity-ktx:1.8.0"
     implementation 'io.coil-kt:coil:2.5.0'
+
+
+    // network
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0'
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0'
+
+    // define a BOM and its version
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+
+    // define any required OkHttp artifacts without version
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
 
 }

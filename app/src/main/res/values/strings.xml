@@ -14,8 +14,8 @@
     <string name="sign_up_title">Sign Up</string>
     <string name="nickname">닉네임</string>
     <string name="nickname_hint">닉네임을 입력해주세요</string>
-    <string name="mbti">MBTI</string>
-    <string name="mbti_hint">MBTI를 입력해주세요</string>
+    <string name="phone_number">전화번호</string>
+    <string name="phone_number_hint">전화번호를 입력해주세요</string>
 
     <string name="fail_sign_up_id">ID는 6글자 이상 10글자 이내로 작성해주세요</string>
     <string name="fail_sign_up_password">비밀번호는 8글자 이상 12글자 이내로 작성해주세요</string>

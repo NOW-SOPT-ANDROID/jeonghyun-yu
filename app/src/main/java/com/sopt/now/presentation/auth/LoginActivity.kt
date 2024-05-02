@@ -14,16 +14,18 @@ import com.sopt.now.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
-    private var userData: SignUpData? = null
+    private var userId: String? = null
+
 
     private val signupLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
         if (it.resultCode == RESULT_OK) {
-            userData =
+            userId = it.data?.getStringExtra("user_id")
+            /*userData =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
                     it.data?.getParcelableExtra(USER_DATA, SignUpData::class.java)
-                else it.data?.getParcelableExtra(USER_DATA)
+                else it.data?.getParcelableExtra(USER_DATA)*/
         }
     }
 
@@ -39,21 +41,26 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun login() {
+        // 로그인 서버 통신
+
+    }
+
     private fun navigateToSignup() =
         Intent(this, SignupActivity::class.java).let { signupLauncher.launch(it) }
 
-    private fun login() {
+    /*private fun login() {
         if (validateLogin()) {
             showToast(R.string.success_login)
-            Intent(this, MainActivity::class.java).apply {
+            *//*Intent(this, MainActivity::class.java).apply {
                 putExtra(USER_DATA, userData)
                 startActivity(this)
-            }
+            }*//*
         } else showToast(R.string.fail_login)
-    }
+    }*/
 
-    private fun validateLogin(): Boolean =
-        userData?.id == binding.etLoginId.text.toString() && userData?.password == binding.etLoginPw.text.toString()
+    /*private fun validateLogin(): Boolean =
+        userData?.id == binding.etLoginId.text.toString() && userData?.password == binding.etLoginPw.text.toString()*/
 
     private fun showToast(message: Int) =
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

@@ -27,7 +27,7 @@
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="30dp"
         android:includeFontPadding="false"
-        android:text="@string/mbti"
+        android:text="@string/phone_number"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
