@@ -29,10 +29,7 @@ class SignupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivitySignupBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        //binding.btnSignup.setOnClickListener { signup() }
+        binding = ActivitySignupBinding.inflate(layoutInflater).apply { setContentView(root) }
         initViews()
     }
 
@@ -50,7 +47,6 @@ class SignupActivity : AppCompatActivity() {
                 response: Response<ResponseSignUpDto>,
             ) {
                 if (response.isSuccessful) {
-                    Log.d("olivia success", "success")
                     val data: ResponseSignUpDto? = response.body()
                     val userId = response.headers()["location"]
 
@@ -66,7 +62,6 @@ class SignupActivity : AppCompatActivity() {
 
                 } else {
                     val error = response.message() // 에러 메세지가 안뜸
-                    Log.d("olivia error", error)
                     Toast.makeText(
                         this@SignupActivity,
                         "회원가입 실패 $error",
@@ -77,7 +72,6 @@ class SignupActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResponseSignUpDto>, t: Throwable) {
-                Log.d("olivia server error", "error ${t.message}")
                 Toast.makeText(this@SignupActivity, "서버 에러 발생 t: ${t.message}", Toast.LENGTH_SHORT).show()
             }
 
@@ -89,9 +83,9 @@ class SignupActivity : AppCompatActivity() {
 
     private fun successSignUp(userId: String) {
         Intent(this, LoginActivity::class.java).apply {
-            putExtra("user_id", userId)
+            //putExtra("user_id", userId)
             setResult(RESULT_OK, this)
-            //finish()
+            finish()
         }
     }
 
@@ -107,24 +101,6 @@ class SignupActivity : AppCompatActivity() {
             phone = phoneNumber
         )
     }
-
-    /*private fun signup() {
-        if (validateSignup()) {
-            val userData = SignUpData(
-                binding.etSignupId.text.toString(),
-                binding.etSignupPw.text.toString(),
-                binding.etSignupNickname.text.toString(),
-                binding.etSignupMbti.text.toString()
-            )
-
-            showToast(R.string.success_signup)
-            Intent(this, LoginActivity::class.java).apply {
-                putExtra(USER_DATA, userData)
-                setResult(RESULT_OK, this)
-                finish()
-            }
-        }
-    }*/
 
     private fun validateSignup(): Boolean =
         validateId() && validatePassword() && validateNickname() //&& validateMBTI()

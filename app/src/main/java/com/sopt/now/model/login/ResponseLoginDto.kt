@@ -1,12 +1,13 @@
-package com.sopt.now.utils
+package com.sopt.now.model.login
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-abstract class BaseResponse {
+data class ResponseLoginDto(
     @SerialName("code")
-    val code: String? = null
+    val code: Int,
+
     @SerialName("message")
-    val message: String? = null
-}
+    val message: String,
+)

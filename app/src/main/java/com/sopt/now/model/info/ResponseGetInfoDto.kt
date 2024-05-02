@@ -1,4 +1,4 @@
-package com.sopt.now.model.login
+package com.sopt.now.model.info
 
 import com.sopt.now.utils.BaseResponse
 import kotlinx.serialization.SerialName
