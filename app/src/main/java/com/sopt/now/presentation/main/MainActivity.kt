@@ -11,12 +11,13 @@ import com.sopt.now.databinding.ActivityMainBinding
 import com.sopt.now.presentation.main.home.HomeFragment
 import com.sopt.now.presentation.main.mypage.MyPageFragment
 import com.sopt.now.presentation.main.search.SearchFragment
-import com.sopt.now.utils.Constants.Companion.USER_DATA
+import com.sopt.now.utils.Constants.Companion.MEMBER_ID
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var userData: SignUpData? = null
+    //private var userData: SignUpData? = null
+    private var memberId: String ?= null
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +26,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(root) }
 
         clickBottomNavigation()
-        userData = getUserInfo()
+        //userData = getUserInfo()
+        memberId = getUserInfo()
     }
 
     private fun clickBottomNavigation() {
@@ -51,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_mypage -> {
                     replaceFragment(MyPageFragment().apply {
                         arguments = Bundle().apply {
-                            putParcelable(USER_DATA, userData)
+                            putString(MEMBER_ID, memberId)
                         }
                     })
                     true
@@ -69,10 +71,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun getUserInfo(): SignUpData? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+    private fun getUserInfo(): String? {
+        return intent.getStringExtra("memberId")
+        /*return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
             intent.getParcelableExtra(USER_DATA, SignUpData::class.java)
-        else intent.getParcelableExtra(USER_DATA)
+        else intent.getParcelableExtra(USER_DATA)*/
     }
 
 }

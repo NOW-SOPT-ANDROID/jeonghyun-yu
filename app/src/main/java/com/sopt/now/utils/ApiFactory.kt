@@ -2,7 +2,8 @@ package com.sopt.now.utils
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.sopt.now.BuildConfig
-import com.sopt.now.presentation.auth.AuthService
+import com.sopt.now.datasource.AuthService
+import com.sopt.now.datasource.InfoService
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -33,4 +34,5 @@ object ApiFactory {
 object ServicePool {
     val authService = ApiFactory.create<AuthService>()
     val loginService = ApiFactory.create<AuthService>()
+    val infoService = ApiFactory.create<InfoService>()
 }

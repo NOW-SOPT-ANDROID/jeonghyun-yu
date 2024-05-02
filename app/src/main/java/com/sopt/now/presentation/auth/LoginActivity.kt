@@ -8,7 +8,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.sopt.now.utils.Constants.Companion.USER_DATA
 import com.sopt.now.presentation.main.MainActivity
 import com.sopt.now.R
 import com.sopt.now.model.SignUpData
@@ -16,6 +15,7 @@ import com.sopt.now.databinding.ActivityLoginBinding
 import com.sopt.now.model.login.RequestLoginDto
 import com.sopt.now.model.login.ResponseLoginDto
 import com.sopt.now.utils.ServicePool
+import com.sopt.now.utils.ServicePool.authService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,7 +23,7 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     //private var userId: String? = null
-    private val authService by lazy { ServicePool.authService }
+    private val loginService by lazy { ServicePool.loginService }
 
     private val signupLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -54,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
         //Log.d("olivia id", userId.toString())
 
         val loginRequest = getLoginData()
-        authService.login(loginRequest).enqueue(object: Callback<ResponseLoginDto> {
+        loginService.login(loginRequest).enqueue(object: Callback<ResponseLoginDto> {
             override fun onResponse(
                 call: Call<ResponseLoginDto>,
                 response: Response<ResponseLoginDto>
@@ -64,6 +64,8 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this@LoginActivity, "로그인 성공 id는 $userId", Toast.LENGTH_SHORT).show()
                     Log.d("olivia id", userId.toString())
 
+                    navigateToMain(userId)
+                    finish()
                 } else {
                     val error = response.message()
                     Toast.makeText(this@LoginActivity, "로그인 실패 $error", Toast.LENGTH_SHORT).show()
@@ -79,8 +81,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun getLoginData() : RequestLoginDto {
         with(binding) {
-            val id = etLoginId.text.toString()
-            val password = etLoginPw.text.toString()
+            val id = etLoginId.text.toString().trim()
+            val password = etLoginPw.text.toString().trim()
 
             return RequestLoginDto(
                 authenticationId = id,
@@ -91,6 +93,12 @@ class LoginActivity : AppCompatActivity() {
 
     private fun navigateToSignup() =
         Intent(this, SignupActivity::class.java).let { signupLauncher.launch(it) }
+
+    private fun navigateToMain(userId: String?) {
+        Intent(this, MainActivity::class.java).apply {
+            putExtra("memberId", userId)
+            startActivity(this) }
+    }
 
     /*private fun login() {
         if (validateLogin()) {

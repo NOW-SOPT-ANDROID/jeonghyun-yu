@@ -1,4 +1,4 @@
-package com.sopt.now.presentation.auth
+package com.sopt.now.datasource
 
 import com.sopt.now.model.login.RequestLoginDto
 import com.sopt.now.model.login.ResponseLoginDto
