@@ -4,7 +4,6 @@ plugins {
     id 'kotlin-parcelize'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0' // build.gradle project에서 확인 가능
     id 'kotlin-kapt'
-    id 'com.google.dagger.hilt.android'
 }
 
 // plugin{}과 andriod{} 사이
