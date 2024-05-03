@@ -25,7 +25,6 @@ class LoginViewModel: ViewModel() {
                 _login.postValue(it.body())
                 memberId = it.headers()["location"]
             }.onFailure {
-         
                 it.printStackTrace()
             }
         }

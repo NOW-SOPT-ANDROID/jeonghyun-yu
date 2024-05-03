@@ -10,6 +10,7 @@ import com.sopt.now.presentation.main.MainActivity
 import com.sopt.now.databinding.ActivityLoginBinding
 import com.sopt.now.model.login.RequestLoginDto
 import com.sopt.now.presentation.auth.signup.SignupActivity
+import com.sopt.now.utils.Constants.Companion.MEMBER_ID
 import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
@@ -63,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun navigateToMain(userId: String?) {
         Intent(this, MainActivity::class.java).apply {
-            putExtra("memberId", userId)
+            putExtra(MEMBER_ID, userId)
             startActivity(this)
             finish()
         }
