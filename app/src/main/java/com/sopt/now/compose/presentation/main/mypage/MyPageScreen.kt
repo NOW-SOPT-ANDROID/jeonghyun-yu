@@ -22,22 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import com.sopt.now.compose.model.userinfo.UserInfo
+import com.sopt.now.compose.utils.Constants.Companion.CODE_SUCCESS_200
 
 @Composable
-fun MyPageScreen(context: Context, memberId: String?) {
-    var userInfo by remember { mutableStateOf<UserInfo?>(null) }
-
-    val myPageViewModel = MyPageViewModel()
-    myPageViewModel.getUserInfo(memberId!!)
-    myPageViewModel.userInfo.observe(LocalLifecycleOwner.current) {
-        try {
-            if (it.code == 200) {
-                userInfo = myPageViewModel.userInfo.value?.data
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
+fun MyPageScreen( memberId: String?) {
+    val userInfo = getUserInfo(memberId)
 
     Column(
         modifier = Modifier
@@ -64,6 +53,23 @@ fun MyPageScreen(context: Context, memberId: String?) {
     }
 }
 
+@Composable
+private fun getUserInfo(memberId: String?): UserInfo? {
+    var userInfo by remember { mutableStateOf<UserInfo?>(null) }
+
+    val myPageViewModel = MyPageViewModel()
+    myPageViewModel.getUserInfo(memberId!!)
+    myPageViewModel.userInfo.observe(LocalLifecycleOwner.current) {
+        try {
+            if (it.code == CODE_SUCCESS_200) {
+                userInfo = myPageViewModel.userInfo.value?.data
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+    return userInfo
+}
 
 @Composable
 private fun customText(text: String, fontSize: Int) {

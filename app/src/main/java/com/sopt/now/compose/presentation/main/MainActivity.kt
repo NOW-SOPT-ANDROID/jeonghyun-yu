@@ -120,7 +120,7 @@ fun showMain(memberId: String?) {
                 }
 
                 2 -> {
-                    MyPageScreen(LocalContext.current, memberId)
+                    MyPageScreen(memberId)
                 }
             }
         }

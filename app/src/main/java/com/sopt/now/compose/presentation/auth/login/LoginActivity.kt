@@ -38,6 +38,7 @@ import com.sopt.now.compose.model.login.RequestLoginDto
 import com.sopt.now.compose.presentation.auth.signup.SignUpActivity
 import com.sopt.now.compose.presentation.main.MainActivity
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
+import com.sopt.now.compose.utils.Constants.Companion.CODE_SUCCESS_200
 import com.sopt.now.compose.utils.Constants.Companion.MEMBER_ID
 import java.lang.Exception
 
@@ -76,7 +77,7 @@ class LoginActivity : ComponentActivity() {
     private fun observeLogin() {
         loginViewModel.login.observe(this) {
             try {
-                if (it.code == 200) {
+                if (it.code == CODE_SUCCESS_200) {
                     val memberId = loginViewModel.getMemberId()
                     navigateToMain(memberId)
                     showToast(memberId.toString())
