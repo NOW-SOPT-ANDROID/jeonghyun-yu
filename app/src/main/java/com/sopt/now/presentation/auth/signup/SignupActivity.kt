@@ -7,19 +7,11 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.sopt.now.utils.Constants.Companion.MAX_ID_LENGTH
-import com.sopt.now.utils.Constants.Companion.MAX_PASSWORD_LENGTH
-import com.sopt.now.utils.Constants.Companion.MBTI_LENGTH
 import com.sopt.now.utils.Constants.Companion.MIN_ID_LENGTH
 import com.sopt.now.utils.Constants.Companion.MIN_PASSWORD_LENGTH
 import com.sopt.now.R
 import com.sopt.now.databinding.ActivitySignupBinding
 import com.sopt.now.model.signup.RequestSignUpDto
-import com.sopt.now.model.signup.ResponseSignUpDto
-import com.sopt.now.presentation.auth.login.LoginActivity
-import com.sopt.now.utils.ServicePool
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -30,7 +22,7 @@ class SignupActivity : AppCompatActivity() {
 
         binding = ActivitySignupBinding.inflate(layoutInflater).apply { setContentView(root) }
         binding.btnSignup.setOnClickListener {
-            signUp()
+            if (validateSignup()) signUp()
         }
         observeSignUp()
     }
@@ -44,14 +36,15 @@ class SignupActivity : AppCompatActivity() {
         signUpViewModel.status.observe(this) {
             if (it) {
                 showToast(R.string.success_signup)
-                navigateToLogin()
+                backToLogin()
             }
         }
     }
 
 
-    private fun navigateToLogin() {
-        Intent(this, LoginActivity::class.java).apply { finish() }
+    private fun backToLogin() {
+        showToast(R.string.success_signup)
+        finish()
     }
 
     private fun getSignUpRequestDto(): RequestSignUpDto {
@@ -71,7 +64,7 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun validateSignup(): Boolean =
-        validateId() && validatePassword() && validateNickname() //&& validateMBTI()
+        validateId() && validatePassword() && validateNickname() && validatePhone()
 
     private fun validateId(): Boolean {
         require(binding.etSignupId.length() in MIN_ID_LENGTH..MAX_ID_LENGTH) {
@@ -82,7 +75,7 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun validatePassword(): Boolean {
-        require(binding.etSignupPw.length() in MIN_PASSWORD_LENGTH..MAX_PASSWORD_LENGTH) {
+        require(binding.etSignupPw.length() >= MIN_PASSWORD_LENGTH && Regex("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\$@!%*#?&.])[A-Za-z[0-9]\$@!%*#?&.]{8,20}\$").matches(binding.etSignupPw.text)) {
             showToast(R.string.fail_sign_up_password)
             return false
         }
@@ -99,9 +92,9 @@ class SignupActivity : AppCompatActivity() {
         return true
     }
 
-    private fun validateMBTI(): Boolean {
-        require(binding.etSignupPhoneNumber.length() == MBTI_LENGTH) {
-            showToast(R.string.fail_sign_up_mbti)
+    private fun validatePhone(): Boolean {
+        require(Regex("^010-\\d{4}-\\d{4}\$").matches(binding.etSignupPhoneNumber.text)) {
+            showToast(R.string.fail_sign_up_phone)
             return false
         }
         return true

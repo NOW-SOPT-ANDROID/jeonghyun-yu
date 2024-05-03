@@ -35,9 +35,9 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.login.observe(this) {
             try {
                 if (it.code == 200) {
-                    navigateToMain(loginViewModel.getMemberId())
-                } else {
-                    Log.d("olivia login fail", it.message)
+                    val memberId = loginViewModel.getMemberId()
+                    navigateToMain(memberId)
+                    showToast(memberId.toString())
                 }
             }catch (e: Exception) {
                 e.printStackTrace()
@@ -69,9 +69,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    /*private fun validateLogin(): Boolean =
-        userData?.id == binding.etLoginId.text.toString() && userData?.password == binding.etLoginPw.text.toString()*/
-
-    private fun showToast(message: Int) =
+    private fun showToast(message: String) =
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
