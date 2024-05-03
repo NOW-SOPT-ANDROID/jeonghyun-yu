@@ -1,10 +1,11 @@
-package com.sopt.now.compose.presentation.auth
+package com.sopt.now.compose.presentation.auth.signup
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,16 +35,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sopt.now.compose.R
 import com.sopt.now.compose.model.SignUpData
+import com.sopt.now.compose.presentation.auth.login.LoginActivity
 import com.sopt.now.compose.utils.Constants.Companion.MAX_ID_LENGTH
-import com.sopt.now.compose.utils.Constants.Companion.MAX_PASSWORD_LENGTH
-import com.sopt.now.compose.utils.Constants.Companion.MBTI_LENGTH
 import com.sopt.now.compose.utils.Constants.Companion.MIN_ID_LENGTH
 import com.sopt.now.compose.utils.Constants.Companion.MIN_PASSWORD_LENGTH
-import com.sopt.now.compose.utils.Constants.Companion.USER_DATA
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class SignUpActivity : ComponentActivity() {
     private lateinit var userData: SignUpData
+    private val signUpViewModel by viewModels<SignUpViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,11 +55,10 @@ class SignUpActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     showSignup(onSignupBtnClicked = {
-                        userData = SignUpData(it.id, it.password, it.nickname, it.mbti)
+                        userData = SignUpData(it.id.trim(), it.password.trim(), it.nickname.trim(), it.phoneNumber.trim())
                         if (validateSignup()) {
                             showToast(R.string.success_signup)
                             navigateToLogin()
-                            finish()
                         }
                     })
                 }
@@ -69,13 +68,12 @@ class SignUpActivity : ComponentActivity() {
 
     private fun navigateToLogin() {
         Intent(this, LoginActivity::class.java).apply {
-            putExtra(USER_DATA, userData)
-            setResult(RESULT_OK, this)
+            finish()
         }
     }
 
     private fun validateSignup(): Boolean =
-        validateId() && validatePassword() && validateNickname() && validateMBTI()
+        validateId() && validatePassword() && validateNickname() && validatePhone()
 
     private fun validateId(): Boolean {
         require(userData.id.length in MIN_ID_LENGTH..MAX_ID_LENGTH) {
@@ -86,7 +84,7 @@ class SignUpActivity : ComponentActivity() {
     }
 
     private fun validatePassword(): Boolean {
-        require(userData.password.length in MIN_PASSWORD_LENGTH..MAX_PASSWORD_LENGTH) {
+        require(userData.password.length >= MIN_PASSWORD_LENGTH && Regex("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\$@!%*#?&.])[A-Za-z[0-9]\$@!%*#?&.]{8,20}\$").matches(userData.password)) {
             showToast(R.string.fail_sign_up_password)
             return false
         }
@@ -101,9 +99,9 @@ class SignUpActivity : ComponentActivity() {
         return true
     }
 
-    private fun validateMBTI(): Boolean {
-        require(userData.mbti.length == MBTI_LENGTH) {
-            showToast(R.string.fail_sign_up_mbti)
+    private fun validatePhone(): Boolean {
+        require(Regex("^010-\\d{4}-\\d{4}\$").matches(userData.phoneNumber)) {
+            showToast(R.string.fail_sign_up_phone)
             return false
         }
         return true
@@ -164,7 +162,7 @@ fun showSignup(
             placeholder = { Text(text = stringResource(R.string.input_password)) },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
         )
 
         Spacer(modifier = Modifier.size(30.dp))
@@ -185,7 +183,7 @@ fun showSignup(
         Spacer(modifier = Modifier.size(30.dp))
 
         Text(
-            text = stringResource(R.string.mbti),
+            text = stringResource(R.string.phone_number),
             fontSize = 20.sp,
             color = Color.Black
         )
@@ -193,7 +191,7 @@ fun showSignup(
         TextField(
             value = mbti,
             onValueChange = { mbti = it },
-            placeholder = { Text(text = stringResource(R.string.input_mbti)) },
+            placeholder = { Text(text = stringResource(R.string.phone_number_hint)) },
             modifier = Modifier.fillMaxWidth()
         )
 

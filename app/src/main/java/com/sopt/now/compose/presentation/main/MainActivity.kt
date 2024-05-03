@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -30,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,12 +42,13 @@ import com.sopt.now.compose.model.BottomNavigationItem
 import com.sopt.now.compose.model.SignUpData
 import com.sopt.now.compose.presentation.main.home.HomeScreen
 import com.sopt.now.compose.presentation.main.mypage.MyPageScreen
+import com.sopt.now.compose.presentation.main.mypage.MyPageViewModel
 import com.sopt.now.compose.presentation.main.search.SearchScreen
-import com.sopt.now.compose.utils.Constants.Companion.USER_DATA
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
+import com.sopt.now.compose.utils.Constants.Companion.MEMBER_ID
 
 class MainActivity : ComponentActivity() {
-    private var userData: SignUpData? = null
+    private var memberId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,22 +59,20 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    userData = getUserData()
-                    showMain(userData)
+                    memberId = getUserData()
+                    showMain(memberId)
                 }
             }
         }
     }
 
-    private fun getUserData(): SignUpData? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            intent.getParcelableExtra(USER_DATA, SignUpData::class.java)
-        else intent.getParcelableExtra(USER_DATA)!!
+    private fun getUserData(): String? {
+        return intent.getStringExtra(MEMBER_ID)
     }
 }
 
 @Composable
-fun showMain(userData: SignUpData?) {
+fun showMain(memberId: String?) {
     var selectedItem by remember { mutableIntStateOf(0) }
     var presses by remember { mutableIntStateOf(0) }
 
@@ -119,7 +120,7 @@ fun showMain(userData: SignUpData?) {
                 }
 
                 2 -> {
-                    MyPageScreen(userData)
+                    MyPageScreen(LocalContext.current, memberId)
                 }
             }
         }
@@ -131,6 +132,6 @@ fun showMain(userData: SignUpData?) {
 @Composable
 fun MainPreview() {
     NOWSOPTAndroidTheme {
-        showMain(userData = SignUpData("id", "password", "nickname", "mbti"))
+        showMain(memberId = null)
     }
 }

@@ -9,5 +9,5 @@ data class SignUpData(
     val id: String,
     val password: String,
     val nickname: String,
-    val mbti: String
+    val phoneNumber: String
 ) : Parcelable

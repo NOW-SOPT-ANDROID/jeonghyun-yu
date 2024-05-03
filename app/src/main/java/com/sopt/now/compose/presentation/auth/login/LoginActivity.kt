@@ -1,13 +1,11 @@
-package com.sopt.now.compose.presentation.auth
+package com.sopt.now.compose.presentation.auth.login
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,27 +34,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sopt.now.compose.R
-import com.sopt.now.compose.model.SignUpData
+import com.sopt.now.compose.model.login.RequestLoginDto
+import com.sopt.now.compose.presentation.auth.signup.SignUpActivity
 import com.sopt.now.compose.presentation.main.MainActivity
-import com.sopt.now.compose.utils.Constants.Companion.USER_DATA
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
+import com.sopt.now.compose.utils.Constants.Companion.MEMBER_ID
+import java.lang.Exception
+
 
 class LoginActivity : ComponentActivity() {
-    private lateinit var userData: SignUpData
-
-    private val signupLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {
-        if (it.resultCode == RESULT_OK) {
-            userData = getUserData(it)
-        }
-    }
-
-    private fun getUserData(it: ActivityResult): SignUpData {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            it.data?.getParcelableExtra(USER_DATA, SignUpData::class.java)!!
-        else it.data?.getParcelableExtra(USER_DATA)!!
-    }
+    private val loginViewModel by viewModels<LoginViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,33 +56,49 @@ class LoginActivity : ComponentActivity() {
                 ) {
                     ShowLogin(
                         onLoginBtnClicked = { id, password ->
-                            navigateToMain(id, password)
+                            login(RequestLoginDto(id, password))
                         },
                         onSignupBtnClicked = {
                             navigateToSignup()
                         }
                     )
                 }
+
+                observeLogin()
             }
         }
     }
 
+    private fun login(data: RequestLoginDto) {
+        loginViewModel.postLogin(data)
+    }
+
+    private fun observeLogin() {
+        loginViewModel.login.observe(this) {
+            try {
+                if (it.code == 200) {
+                    val memberId = loginViewModel.getMemberId()
+                    navigateToMain(memberId)
+                    showToast(memberId.toString())
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun showToast(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
     private fun navigateToSignup() =
-        Intent(this, SignUpActivity::class.java).let { signupLauncher.launch(it) }
+        Intent(this, SignUpActivity::class.java).apply { startActivity(this) }
 
-    private fun navigateToMain() {
+    private fun navigateToMain(memberId: String?) {
         Intent(this, MainActivity::class.java).apply {
-            putExtra(USER_DATA, userData)
-        }.let { startActivity(it) }
+            putExtra(MEMBER_ID, memberId)
+            startActivity(this)
+            finish()
+        }
     }
-
-    private fun navigateToMain(id: String, password: String) {
-        if (validateLogin(id, password)) navigateToMain()
-        else Toast.makeText(this, R.string.fail_login, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun validateLogin(id: String, password: String): Boolean =
-        id == userData.id && password == userData.password
 
 }
 
@@ -149,7 +152,7 @@ fun ShowLogin(
             placeholder = { Text(text = stringResource(R.string.input_password)) },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
         )
 
         Spacer(modifier = Modifier.weight(5f))
