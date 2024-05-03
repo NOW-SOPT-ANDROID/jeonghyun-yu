@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.sopt.now.databinding.FragmentMypageBinding
 import com.sopt.now.model.SignUpData
 import com.sopt.now.model.info.ResponseGetInfoDto
@@ -22,10 +24,8 @@ import retrofit2.Response
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMypageBinding? = null
     private val binding get() = requireNotNull(_binding)
-
-    //private var userData: SignUpData? = null
     private var memberId: String = ""
-    private val infoService by lazy { ServicePool.infoService }
+    private val myPageViewModel by viewModels<MyPageViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +42,7 @@ class MyPageFragment : Fragment() {
 
         memberId = getMemberId()
         getUserInfo()
+        observeUserInfo()
     }
 
     override fun onDestroyView() {
@@ -50,37 +51,14 @@ class MyPageFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun getMemberId(): String {
-        return arguments?.getString(MEMBER_ID)!!
-    }
+    private fun getMemberId(): String = arguments?.getString(MEMBER_ID)!!
 
-    private fun getUserInfo() {
-        // 서버 통신
-        Toast.makeText(context, "memberID $memberId", Toast.LENGTH_SHORT).show()
+    private fun getUserInfo() = myPageViewModel.getUserInfo(memberId)
 
-        infoService.getUserInfo(memberId).enqueue(object : Callback<ResponseGetInfoDto> {
-            override fun onResponse(
-                call: Call<ResponseGetInfoDto>,
-                response: Response<ResponseGetInfoDto>
-            ) {
-                if (response.isSuccessful) {
-                    val result = response.body() as ResponseGetInfoDto
-                    showUserInfo(result.data)
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseGetInfoDto>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
-
-        })
-
-        /*with(binding) {
-            tvMainUserNickname.text = userData?.nickname
-            tvMainUserMbti.text = userData?.mbti
-            tvMainUserId.text = userData?.id
-            tvMainUserPw.text = userData?.password
-        }*/
+    private fun observeUserInfo() {
+        myPageViewModel.userInfo.observe(viewLifecycleOwner) {
+            showUserInfo(it)
+        }
     }
 
     private fun showUserInfo(data: UserInfo) {
