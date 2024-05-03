@@ -18,7 +18,6 @@ class LoginViewModel: ViewModel() {
     fun getMemberId() = memberId
 
     fun postLogin(data: RequestLoginDto) {
-        Log.d("olivia viewModel", data.toString())
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 loginService.login(data)
@@ -26,7 +25,6 @@ class LoginViewModel: ViewModel() {
                 _login.postValue(it.body())
                 memberId = it.headers()["location"]
             }.onFailure {
-
                 it.printStackTrace()
             }
         }

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sopt.now.compose.R
 import com.sopt.now.compose.model.SignUpData
+import com.sopt.now.compose.model.signup.RequestSignUpDto
 import com.sopt.now.compose.presentation.auth.login.LoginActivity
 import com.sopt.now.compose.utils.Constants.Companion.MAX_ID_LENGTH
 import com.sopt.now.compose.utils.Constants.Companion.MIN_ID_LENGTH
@@ -42,7 +43,6 @@ import com.sopt.now.compose.utils.Constants.Companion.MIN_PASSWORD_LENGTH
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class SignUpActivity : ComponentActivity() {
-    private lateinit var userData: SignUpData
     private val signUpViewModel by viewModels<SignUpViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,14 +54,33 @@ class SignUpActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    showSignup(onSignupBtnClicked = {
-                        userData = SignUpData(it.id.trim(), it.password.trim(), it.nickname.trim(), it.phoneNumber.trim())
-                        if (validateSignup()) {
-                            showToast(R.string.success_signup)
-                            navigateToLogin()
+                    showSignup(onSignupBtnClicked = { id, password, nickname, phone ->
+                        if (validateSignup(id, password, nickname, phone)) {
+                            signUp(
+                                RequestSignUpDto(
+                                    id.trim(),
+                                    password.trim(),
+                                    nickname.trim(),
+                                    phone.trim()
+                                )
+                            )
                         }
                     })
+                    observeSignUp()
                 }
+            }
+        }
+    }
+
+    private fun signUp(data: RequestSignUpDto) {
+        signUpViewModel.signUp(data)
+    }
+
+    private fun observeSignUp() {
+        signUpViewModel.status.observe(this) {
+            if (it) {
+                showToast(R.string.success_signup)
+                navigateToLogin()
             }
         }
     }
@@ -72,35 +91,46 @@ class SignUpActivity : ComponentActivity() {
         }
     }
 
-    private fun validateSignup(): Boolean =
-        validateId() && validatePassword() && validateNickname() && validatePhone()
+    private fun validateSignup(
+        id: String,
+        password: String,
+        nickname: String,
+        phone: String
+    ): Boolean =
+        validateId(id) && validatePassword(password) && validateNickname(nickname) && validatePhone(
+            phone
+        )
 
-    private fun validateId(): Boolean {
-        require(userData.id.length in MIN_ID_LENGTH..MAX_ID_LENGTH) {
+    private fun validateId(id: String): Boolean {
+        require(id.length in MIN_ID_LENGTH..MAX_ID_LENGTH) {
             showToast(R.string.fail_sign_up_id)
             return false
         }
         return true
     }
 
-    private fun validatePassword(): Boolean {
-        require(userData.password.length >= MIN_PASSWORD_LENGTH && Regex("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\$@!%*#?&.])[A-Za-z[0-9]\$@!%*#?&.]{8,20}\$").matches(userData.password)) {
+    private fun validatePassword(password: String): Boolean {
+        require(
+            password.length >= MIN_PASSWORD_LENGTH && Regex("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\$@!%*#?&.])[A-Za-z[0-9]\$@!%*#?&.]{8,20}\$").matches(
+                password
+            )
+        ) {
             showToast(R.string.fail_sign_up_password)
             return false
         }
         return true
     }
 
-    private fun validateNickname(): Boolean {
-        require(userData.nickname.trim().isNotEmpty()) {
+    private fun validateNickname(nickname: String): Boolean {
+        require(nickname.trim().isNotEmpty()) {
             showToast(R.string.fail_sign_up_nickname)
             return false
         }
         return true
     }
 
-    private fun validatePhone(): Boolean {
-        require(Regex("^010-\\d{4}-\\d{4}\$").matches(userData.phoneNumber)) {
+    private fun validatePhone(phoneNumber: String): Boolean {
+        require(Regex("^010-\\d{4}-\\d{4}\$").matches(phoneNumber)) {
             showToast(R.string.fail_sign_up_phone)
             return false
         }
@@ -113,12 +143,12 @@ class SignUpActivity : ComponentActivity() {
 
 @Composable
 fun showSignup(
-    onSignupBtnClicked: (SignUpData) -> Unit
+    onSignupBtnClicked: (String, String, String, String) -> Unit
 ) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var nickname by remember { mutableStateOf("") }
-    var mbti by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -189,8 +219,8 @@ fun showSignup(
         )
         Spacer(modifier = Modifier.size(10.dp))
         TextField(
-            value = mbti,
-            onValueChange = { mbti = it },
+            value = phone,
+            onValueChange = { phone = it },
             placeholder = { Text(text = stringResource(R.string.phone_number_hint)) },
             modifier = Modifier.fillMaxWidth()
         )
@@ -198,7 +228,7 @@ fun showSignup(
         Spacer(modifier = Modifier.weight(5f))
 
         Button(
-            onClick = { onSignupBtnClicked(SignUpData(id, password, nickname, mbti)) },
+            onClick = { onSignupBtnClicked(id, password, nickname, phone) },
             modifier = Modifier
                 .fillMaxWidth()
         ) {
@@ -213,6 +243,6 @@ fun showSignup(
 @Composable
 fun SignupPreview() {
     NOWSOPTAndroidTheme {
-        showSignup(onSignupBtnClicked = { SignUpData -> })
+        showSignup(onSignupBtnClicked = { _, _, _, _ -> })
     }
 }
