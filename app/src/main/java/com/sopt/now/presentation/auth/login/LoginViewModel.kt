@@ -1,5 +1,6 @@
 package com.sopt.now.presentation.auth.login
 
+import android.os.Build.VERSION_CODES.N
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,8 +33,7 @@ class LoginViewModel : ViewModel() {
                     memberId = it.headers()["location"]
                 } else {
                     _status.postValue(false)
-                    val errorBody = NetworkUtil.getErrorResponse(it.errorBody()!!)
-                    errorMessage = errorBody?.message
+                    errorMessage = NetworkUtil.getErrorResponse(it.errorBody()!!)?.message
                 }
             }.onFailure {
                 it.printStackTrace()
