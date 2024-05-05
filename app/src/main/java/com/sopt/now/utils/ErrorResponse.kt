@@ -4,9 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-abstract class BaseResponse {
+data class ErrorResponse (
     @SerialName("code")
-    val code: String? = null
+    val code: Int,
     @SerialName("message")
-    val message: String? = null
-}
+    val message: String
+)

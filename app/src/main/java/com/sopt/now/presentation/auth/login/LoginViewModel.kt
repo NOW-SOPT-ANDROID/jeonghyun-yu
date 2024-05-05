@@ -6,24 +6,39 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sopt.now.model.login.RequestLoginDto
 import com.sopt.now.model.login.ResponseLoginDto
+import com.sopt.now.utils.ApiFactory
+import com.sopt.now.utils.ErrorResponse
+import com.sopt.now.utils.NetworkUtil
 import com.sopt.now.utils.ServicePool.loginService
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class LoginViewModel: ViewModel() {
+class LoginViewModel : ViewModel() {
     private var _login = MutableLiveData<ResponseLoginDto>()
-    var login : MutableLiveData<ResponseLoginDto> = _login
+    var login: MutableLiveData<ResponseLoginDto> = _login
 
-    private var memberId: String ?= null
+    private var _status = MutableLiveData<Boolean>()
+    var status: MutableLiveData<Boolean> = _status
+
+    private var memberId: String? = null
     fun getMemberId() = memberId
 
+    private var errorMessage: String? = null
+    fun getErrorMessage() = errorMessage
+
     fun postLogin(data: RequestLoginDto) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             runCatching {
                 loginService.login(data)
             }.onSuccess {
-                _login.postValue(it.body())
-                memberId = it.headers()["location"]
+                if (it.isSuccessful) {
+                    _status.postValue(true)
+                    _login.postValue(it.body())
+                    memberId = it.headers()["location"]
+                } else {
+                    _status.postValue(false)
+                    val errorBody = NetworkUtil.getErrorResponse(it.errorBody()!!)
+                    errorMessage = errorBody?.message
+                }
             }.onFailure {
                 it.printStackTrace()
             }

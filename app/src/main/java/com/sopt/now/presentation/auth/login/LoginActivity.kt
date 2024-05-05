@@ -11,6 +11,7 @@ import com.sopt.now.databinding.ActivityLoginBinding
 import com.sopt.now.model.login.RequestLoginDto
 import com.sopt.now.presentation.auth.signup.SignupActivity
 import com.sopt.now.utils.Constants.Companion.MEMBER_ID
+import com.sopt.now.utils.NetworkUtil
 import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
@@ -30,24 +31,23 @@ class LoginActivity : AppCompatActivity() {
         observeLogin()
     }
 
-    private fun login() = loginViewModel.postLogin(getLoginData())
+    private fun login() {
+        loginViewModel.postLogin(getLoginData())
+    }
 
     private fun observeLogin() {
-        loginViewModel.login.observe(this) {
-            try {
-                if (it.code == 200) {
-                    val memberId = loginViewModel.getMemberId()
-                    navigateToMain(memberId)
-                    showToast(memberId.toString())
-                }
-            }catch (e: Exception) {
-                e.printStackTrace()
+        loginViewModel.status.observe(this) {
+            if (it) {
+                val memberId = loginViewModel.getMemberId()
+                navigateToMain(memberId)
+                showToast(memberId.toString())
+            } else {
+                showToast(loginViewModel.getErrorMessage() ?: "")
             }
-
         }
     }
 
-    private fun getLoginData() : RequestLoginDto {
+    private fun getLoginData(): RequestLoginDto {
         with(binding) {
             val id = etLoginId.text.toString().trim()
             val password = etLoginPw.text.toString().trim()
