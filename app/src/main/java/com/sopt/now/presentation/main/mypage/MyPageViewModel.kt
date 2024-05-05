@@ -7,20 +7,33 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sopt.now.model.info.ResponseGetInfoDto
 import com.sopt.now.model.info.UserInfo
+import com.sopt.now.utils.NetworkUtil
 import com.sopt.now.utils.ServicePool.infoService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MyPageViewModel : ViewModel() {
-    private var _userInfo = MutableLiveData<UserInfo>()
-    var userInfo : MutableLiveData<UserInfo> = _userInfo
+    private lateinit var userInfo : UserInfo
+    fun getUserInfo() = userInfo
+
+    private var _status = MutableLiveData<Boolean>()
+    var status: MutableLiveData<Boolean> = _status
+
+    private var errorMessage: String? = null
+    fun getErrorMessage() = errorMessage
 
     fun getUserInfo(memberId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 infoService.getUserInfo(memberId)
             }.onSuccess {
-                _userInfo.postValue(it.body()?.data)
+                if (it.isSuccessful) {
+                    _status.postValue(true)
+                    userInfo = it.body()?.data!!
+                } else {
+                    _status.postValue(false)
+                    errorMessage = NetworkUtil.getErrorResponse(it.errorBody()!!)?.message
+                }
             }.onFailure {
                 it.printStackTrace()
             }

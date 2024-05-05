@@ -13,9 +13,6 @@ import com.sopt.now.utils.ServicePool.loginService
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
-    private var _login = MutableLiveData<ResponseLoginDto>()
-    var login: MutableLiveData<ResponseLoginDto> = _login
-
     private var _status = MutableLiveData<Boolean>()
     var status: MutableLiveData<Boolean> = _status
 
@@ -32,7 +29,6 @@ class LoginViewModel : ViewModel() {
             }.onSuccess {
                 if (it.isSuccessful) {
                     _status.postValue(true)
-                    _login.postValue(it.body())
                     memberId = it.headers()["location"]
                 } else {
                     _status.postValue(false)
