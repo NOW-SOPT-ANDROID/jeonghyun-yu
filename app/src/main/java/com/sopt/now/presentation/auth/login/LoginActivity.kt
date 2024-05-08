@@ -64,10 +64,10 @@ class LoginActivity : AppCompatActivity() {
         Intent(this, SignupActivity::class.java).apply { startActivity(this) }
 
     private fun navigateToMain() {
-        Intent(this, MainActivity::class.java).apply {
-            startActivity(this)
-            finish()
+        Intent(this, MainActivity::class.java).also {
+            startActivity(it)
         }
+        finish()
     }
 
 }
