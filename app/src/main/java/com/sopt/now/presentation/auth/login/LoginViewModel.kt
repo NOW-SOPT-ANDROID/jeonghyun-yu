@@ -1,5 +1,6 @@
 package com.sopt.now.presentation.auth.login
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,14 +11,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
-    private var _status = MutableLiveData<Boolean>()
-    var status: MutableLiveData<Boolean> = _status
+    private val _status = MutableLiveData<Boolean>()
+    val status: LiveData<Boolean> get() = _status
 
-    private var memberId: String? = null
-    fun getMemberId() = memberId
+    private var _memberId: String? = null
+    val memberId: String? get() = _memberId
 
-    private var errorMessage: String? = null
-    fun getErrorMessage() = errorMessage
+    private var _errorMessage: String? = null
+    val errorMessage: String? get() = _errorMessage
 
     fun postLogin(data: RequestLoginDto) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -25,10 +26,10 @@ class LoginViewModel : ViewModel() {
                 loginService.login(data)
             }.onSuccess {
                 if (it.isSuccessful) {
-                    memberId = it.headers()["location"]
+                    _memberId = it.headers()["location"]
                     _status.postValue(true)
                 } else {
-                    errorMessage = it.errorBody()
+                    _errorMessage = it.errorBody()
                         ?.let { e -> NetworkUtil.getErrorResponse(e)?.message }
                     _status.postValue(false)
                 }

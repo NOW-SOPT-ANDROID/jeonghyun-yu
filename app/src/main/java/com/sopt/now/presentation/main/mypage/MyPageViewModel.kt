@@ -12,14 +12,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MyPageViewModel : ViewModel() {
-    private lateinit var userInfo : UserInfo
-    fun getUserInfo() = userInfo
+    private lateinit var _userInfo: UserInfo
+    val userInfo: UserInfo get() = _userInfo
+    //fun getUserInfo() = userInfo
 
-    private var _status = MutableLiveData<Boolean>()
-    var status: MutableLiveData<Boolean> = _status
+    private val _status = MutableLiveData<Boolean>()
+    val status: LiveData<Boolean> get() = _status
 
-    private var errorMessage: String? = null
-    fun getErrorMessage() = errorMessage
+
+    private var _errorMessage: String? = null
+    val errorMessage: String? get() = _errorMessage
 
     fun getUserInfo(memberId: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -28,10 +30,10 @@ class MyPageViewModel : ViewModel() {
             }.onSuccess {
                 if (it.isSuccessful) {
                     _status.postValue(true)
-                    userInfo = it.body()?.data!!
+                    _userInfo = it.body()?.data!!
                 } else {
                     _status.postValue(false)
-                    errorMessage = NetworkUtil.getErrorResponse(it.errorBody()!!)?.message
+                    _errorMessage = NetworkUtil.getErrorResponse(it.errorBody()!!)?.message
                 }
             }.onFailure {
                 it.printStackTrace()

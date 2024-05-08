@@ -39,11 +39,11 @@ class LoginActivity : AppCompatActivity() {
     private fun observeLogin() {
         loginViewModel.status.observe(this) {
             if (it) {
-                val memberId = loginViewModel.getMemberId()
+                val memberId = loginViewModel.memberId
                 navigateToMain(memberId)
                 showToast(memberId.toString())
             } else {
-                showToast(loginViewModel.getErrorMessage() ?: "")
+                showToast(loginViewModel.errorMessage ?: "")
             }
         }
     }

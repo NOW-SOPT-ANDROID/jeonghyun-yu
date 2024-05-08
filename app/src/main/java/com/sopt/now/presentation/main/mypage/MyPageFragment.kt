@@ -50,9 +50,9 @@ class MyPageFragment : Fragment() {
     private fun observeUserInfo() {
         myPageViewModel.status.observe(viewLifecycleOwner) {
             if (it) {
-                showUserInfo(myPageViewModel.getUserInfo())
+                showUserInfo(myPageViewModel.userInfo)
             } else {
-                toast(myPageViewModel.getErrorMessage() ?: "")
+                toast(myPageViewModel.errorMessage ?: "")
             }
         }
     }

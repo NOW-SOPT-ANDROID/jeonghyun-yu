@@ -34,7 +34,7 @@ class SignupActivity : AppCompatActivity() {
                 showToast((R.string.success_signup).toString())
                 backToLogin()
             } else {
-                showToast(signUpViewModel.getErrorMessage()!!)
+                showToast(signUpViewModel.errorMessage ?: "")
             }
         }
     }
