@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.sopt.now.BuildConfig
 import com.sopt.now.datasource.AuthService
 import com.sopt.now.datasource.InfoService
+import com.sopt.now.utils.ApiFactory.create
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -29,11 +30,12 @@ object ApiFactory {
             .build()
     }
 
-    inline fun <reified T> create(): T = retrofit.create(T::class.java) // create를 통해서 retrofit 구현체 생성
+    inline fun <reified T> create(): T =
+        retrofit.create(T::class.java) // create를 통해서 retrofit 구현체 생성
 }
 
 object ServicePool {
-    val authService = ApiFactory.create<AuthService>()
-    val loginService = ApiFactory.create<AuthService>()
-    val infoService = ApiFactory.create<InfoService>()
+    val authService: AuthService by lazy { create<AuthService>() }
+    val loginService: AuthService by lazy { create<AuthService>() }
+    val infoService: InfoService by lazy { create<InfoService>() }
 }
