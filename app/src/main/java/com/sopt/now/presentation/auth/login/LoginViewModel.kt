@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sopt.now.ApplicationClass.SharedPreferences.editor
 import com.sopt.now.model.login.RequestLoginDto
+import com.sopt.now.utils.Constants.Companion.MEMBER_ID
 import com.sopt.now.utils.NetworkUtil
 import com.sopt.now.utils.ServicePool.loginService
 import kotlinx.coroutines.Dispatchers
@@ -13,9 +15,6 @@ import kotlinx.coroutines.launch
 class LoginViewModel : ViewModel() {
     private val _status = MutableLiveData<Boolean>()
     val status: LiveData<Boolean> get() = _status
-
-    private var _memberId: String? = null
-    val memberId: String? get() = _memberId
 
     private var _errorMessage: String? = null
     val errorMessage: String? get() = _errorMessage
@@ -26,7 +25,9 @@ class LoginViewModel : ViewModel() {
                 loginService.login(data)
             }.onSuccess {
                 if (it.isSuccessful) {
-                    _memberId = it.headers()["location"]
+                    editor.putString(MEMBER_ID, it.headers()["location"])
+                    editor.commit()
+
                     _status.postValue(true)
                 } else {
                     _errorMessage = it.errorBody()

@@ -15,7 +15,6 @@ import com.sopt.now.utils.Constants.Companion.MEMBER_ID
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var memberId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(root) }
 
         clickBottomNavigation()
-        memberId = getUserInfo()
     }
 
     private fun clickBottomNavigation() {
@@ -47,11 +45,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_mypage -> {
-                    replaceFragment(MyPageFragment().apply {
-                        arguments = Bundle().apply {
-                            putString(MEMBER_ID, memberId)
-                        }
-                    })
+                    replaceFragment(MyPageFragment())
                     true
                 }
 
@@ -65,6 +59,4 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.fcv_main, fragment)
             .commit()
     }
-
-    private fun getUserInfo(): String? = intent.getStringExtra(MEMBER_ID)
 }

@@ -1,15 +1,12 @@
 package com.sopt.now.presentation.main.mypage
 
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.sopt.now.ApplicationClass.SharedPreferences.sSharedPreferences
 import com.sopt.now.databinding.FragmentMypageBinding
 import com.sopt.now.model.info.UserInfo
 import com.sopt.now.utils.Constants.Companion.MEMBER_ID
@@ -33,7 +30,7 @@ class MyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        memberId = getMemberId()
+        memberId = sSharedPreferences.getString(MEMBER_ID, null)
         getUserInfo()
         observeUserInfo()
     }
@@ -43,9 +40,9 @@ class MyPageFragment : Fragment() {
         super.onDestroyView()
     }
 
-    private fun getMemberId(): String? = arguments?.getString(MEMBER_ID)
-
-    private fun getUserInfo() = memberId?.let { myPageViewModel.getUserInfo(it) }
+    private fun getUserInfo() {
+        memberId?.let { myPageViewModel.getUserInfo(it) }
+    }
 
     private fun observeUserInfo() {
         myPageViewModel.status.observe(viewLifecycleOwner) {

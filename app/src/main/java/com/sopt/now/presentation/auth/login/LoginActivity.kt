@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.sopt.now.ApplicationClass
 import com.sopt.now.presentation.main.MainActivity
 import com.sopt.now.databinding.ActivityLoginBinding
 import com.sopt.now.model.login.RequestLoginDto
@@ -39,9 +40,8 @@ class LoginActivity : AppCompatActivity() {
     private fun observeLogin() {
         loginViewModel.status.observe(this) {
             if (it) {
-                val memberId = loginViewModel.memberId
-                navigateToMain(memberId)
-                showToast(memberId.toString())
+                navigateToMain()
+                showToast(ApplicationClass.SharedPreferences.sSharedPreferences.getString(MEMBER_ID, null) ?: "")
             } else {
                 showToast(loginViewModel.errorMessage ?: "")
             }
@@ -63,9 +63,8 @@ class LoginActivity : AppCompatActivity() {
     private fun navigateToSignup() =
         Intent(this, SignupActivity::class.java).apply { startActivity(this) }
 
-    private fun navigateToMain(userId: String?) {
+    private fun navigateToMain() {
         Intent(this, MainActivity::class.java).apply {
-            putExtra(MEMBER_ID, userId)
             startActivity(this)
             finish()
         }

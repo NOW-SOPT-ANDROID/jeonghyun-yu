@@ -1,14 +1,8 @@
 package com.sopt.now.presentation.auth.signup
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.sopt.now.utils.Constants.Companion.MAX_ID_LENGTH
-import com.sopt.now.utils.Constants.Companion.MIN_ID_LENGTH
-import com.sopt.now.utils.Constants.Companion.MIN_PASSWORD_LENGTH
 import com.sopt.now.R
 import com.sopt.now.databinding.ActivitySignupBinding
 import com.sopt.now.model.signup.RequestSignUpDto

@@ -25,7 +25,7 @@ class MyPageViewModel : ViewModel() {
     fun getUserInfo(memberId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
-                infoService.getUserInfo(memberId)
+                infoService.getUserInfo()
             }.onSuccess {
                 if (it.isSuccessful) {
                     _status.postValue(true)

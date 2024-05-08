@@ -20,6 +20,7 @@ object ApiFactory {
         .readTimeout(5000, TimeUnit.MILLISECONDS)
         .connectTimeout(5000, TimeUnit.MILLISECONDS)
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        .addNetworkInterceptor(XAccessTokenInterceptor())
         .build()
 
     val retrofit: Retrofit by lazy {
