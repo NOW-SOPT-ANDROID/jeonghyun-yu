@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sopt.now.model.info.ResponseGetInfoDto
 import com.sopt.now.model.info.UserInfo
 import com.sopt.now.utils.NetworkUtil
 import com.sopt.now.utils.ServicePool.infoService

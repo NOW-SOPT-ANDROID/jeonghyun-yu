@@ -1,16 +1,12 @@
 package com.sopt.now.presentation.auth.login
 
-import android.os.Build.VERSION_CODES.N
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sopt.now.model.login.RequestLoginDto
-import com.sopt.now.model.login.ResponseLoginDto
-import com.sopt.now.utils.ApiFactory
-import com.sopt.now.utils.ErrorResponse
 import com.sopt.now.utils.NetworkUtil
 import com.sopt.now.utils.ServicePool.loginService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
@@ -24,7 +20,7 @@ class LoginViewModel : ViewModel() {
     fun getErrorMessage() = errorMessage
 
     fun postLogin(data: RequestLoginDto) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 loginService.login(data)
             }.onSuccess {
