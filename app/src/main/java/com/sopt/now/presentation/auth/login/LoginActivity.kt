@@ -2,19 +2,15 @@ package com.sopt.now.presentation.auth.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.sopt.now.ApplicationClass
-import com.sopt.now.presentation.main.MainActivity
 import com.sopt.now.databinding.ActivityLoginBinding
 import com.sopt.now.model.login.RequestLoginDto
 import com.sopt.now.presentation.auth.signup.SignupActivity
+import com.sopt.now.presentation.main.MainActivity
 import com.sopt.now.utils.Constants.Companion.MEMBER_ID
-import com.sopt.now.utils.NetworkUtil
 import com.sopt.now.utils.showToast
-import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -41,7 +37,12 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.status.observe(this) {
             if (it) {
                 navigateToMain()
-                showToast(ApplicationClass.SharedPreferences.sSharedPreferences.getString(MEMBER_ID, null) ?: "")
+                showToast(
+                    ApplicationClass.SharedPreferences.sSharedPreferences.getString(
+                        MEMBER_ID,
+                        null
+                    ) ?: ""
+                )
             } else {
                 showToast(loginViewModel.errorMessage ?: "")
             }

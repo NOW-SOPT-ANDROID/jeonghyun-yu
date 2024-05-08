@@ -1,7 +1,6 @@
 package com.sopt.now
 
 import android.app.Application
-import android.content.SharedPreferences
 import com.sopt.now.ApplicationClass.SharedPreferences.editor
 import com.sopt.now.ApplicationClass.SharedPreferences.sSharedPreferences
 

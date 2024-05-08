@@ -1,8 +1,6 @@
 package com.sopt.now.presentation.main
 
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.sopt.now.R
@@ -10,7 +8,6 @@ import com.sopt.now.databinding.ActivityMainBinding
 import com.sopt.now.presentation.main.home.HomeFragment
 import com.sopt.now.presentation.main.mypage.MyPageFragment
 import com.sopt.now.presentation.main.search.SearchFragment
-import com.sopt.now.utils.Constants.Companion.MEMBER_ID
 
 
 class MainActivity : AppCompatActivity() {

@@ -1,6 +1,5 @@
 package com.sopt.now.utils
 
-import android.util.Log
 import okhttp3.ResponseBody
 
 object NetworkUtil {
