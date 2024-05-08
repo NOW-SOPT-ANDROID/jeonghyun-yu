@@ -12,6 +12,7 @@ import com.sopt.now.model.login.RequestLoginDto
 import com.sopt.now.presentation.auth.signup.SignupActivity
 import com.sopt.now.utils.Constants.Companion.MEMBER_ID
 import com.sopt.now.utils.NetworkUtil
+import com.sopt.now.utils.showToast
 import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
@@ -70,6 +71,4 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun showToast(message: String) =
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }

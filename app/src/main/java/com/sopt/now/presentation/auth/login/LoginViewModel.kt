@@ -25,11 +25,12 @@ class LoginViewModel : ViewModel() {
                 loginService.login(data)
             }.onSuccess {
                 if (it.isSuccessful) {
-                    _status.postValue(true)
                     memberId = it.headers()["location"]
+                    _status.postValue(true)
                 } else {
+                    errorMessage = it.errorBody()
+                        ?.let { e -> NetworkUtil.getErrorResponse(e)?.message }
                     _status.postValue(false)
-                    errorMessage = NetworkUtil.getErrorResponse(it.errorBody()!!)?.message
                 }
             }.onFailure {
                 it.printStackTrace()

@@ -12,6 +12,7 @@ import com.sopt.now.utils.Constants.Companion.MIN_PASSWORD_LENGTH
 import com.sopt.now.R
 import com.sopt.now.databinding.ActivitySignupBinding
 import com.sopt.now.model.signup.RequestSignUpDto
+import com.sopt.now.utils.showToast
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -59,7 +60,4 @@ class SignupActivity : AppCompatActivity() {
             )
         }
     }
-
-    private fun showToast(message: String) =
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }

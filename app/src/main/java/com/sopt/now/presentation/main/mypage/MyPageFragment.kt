@@ -2,6 +2,7 @@ package com.sopt.now.presentation.main.mypage
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.fragment.app.viewModels
 import com.sopt.now.databinding.FragmentMypageBinding
 import com.sopt.now.model.info.UserInfo
 import com.sopt.now.utils.Constants.Companion.MEMBER_ID
+import com.sopt.now.utils.toast
 
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMypageBinding? = null
@@ -50,7 +52,7 @@ class MyPageFragment : Fragment() {
             if (it) {
                 showUserInfo(myPageViewModel.getUserInfo())
             } else {
-                showToast(myPageViewModel.getErrorMessage() ?: "")
+                toast(myPageViewModel.getErrorMessage() ?: "")
             }
         }
     }
@@ -62,7 +64,4 @@ class MyPageFragment : Fragment() {
             tvMainUserPhone.text = data.phone
         }
     }
-
-    private fun showToast(message: String) =
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
