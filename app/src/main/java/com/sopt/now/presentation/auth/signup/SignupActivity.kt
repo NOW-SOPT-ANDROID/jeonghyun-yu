@@ -41,7 +41,7 @@ class SignupActivity : AppCompatActivity() {
 
 
     private fun backToLogin() {
-        showToast((R.string.success_signup).toString())
+        showToast(getString(R.string.success_signup))
         finish()
     }
 

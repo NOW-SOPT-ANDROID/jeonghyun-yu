@@ -26,7 +26,8 @@ class SignUpViewModel : ViewModel() {
                 if (it.isSuccessful) _status.postValue(true)
                 else {
                     _status.postValue(false)
-                    _errorMessage = NetworkUtil.getErrorResponse(it.errorBody()!!)?.message
+                    _errorMessage = it.errorBody()
+                        ?.let { e -> NetworkUtil.getErrorResponse(e)?.message }
                 }
             }.onFailure {
                 it.printStackTrace()

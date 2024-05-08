@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 class MyPageViewModel : ViewModel() {
     private lateinit var _userInfo: UserInfo
     val userInfo: UserInfo get() = _userInfo
-    //fun getUserInfo() = userInfo
 
     private val _status = MutableLiveData<Boolean>()
     val status: LiveData<Boolean> get() = _status
@@ -30,10 +29,15 @@ class MyPageViewModel : ViewModel() {
             }.onSuccess {
                 if (it.isSuccessful) {
                     _status.postValue(true)
-                    _userInfo = it.body()?.data!!
+                    it.body()?.data.also { info ->
+                        if (info != null) {
+                            _userInfo = info
+                        }
+                    }
                 } else {
                     _status.postValue(false)
-                    _errorMessage = NetworkUtil.getErrorResponse(it.errorBody()!!)?.message
+                    _errorMessage = it.errorBody()
+                        ?.let { e -> NetworkUtil.getErrorResponse(e)?.message }
                 }
             }.onFailure {
                 it.printStackTrace()
