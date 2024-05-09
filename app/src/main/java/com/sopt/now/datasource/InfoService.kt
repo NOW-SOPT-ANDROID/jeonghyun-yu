@@ -7,7 +7,5 @@ import retrofit2.http.GET
 
 interface InfoService {
     @GET("member/info")
-    suspend fun getUserInfo(
-        //@Header(MEMBER_ID) memberId: String
-    ): Response<BaseResponse<UserInfo>>
+    suspend fun getUserInfo(): Response<BaseResponse<UserInfo>>
 }
