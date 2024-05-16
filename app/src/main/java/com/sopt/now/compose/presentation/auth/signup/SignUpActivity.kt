@@ -2,7 +2,6 @@ package com.sopt.now.compose.presentation.auth.signup
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -34,13 +33,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sopt.now.compose.R
-import com.sopt.now.compose.model.SignUpData
 import com.sopt.now.compose.model.signup.RequestSignUpDto
 import com.sopt.now.compose.presentation.auth.login.LoginActivity
-import com.sopt.now.compose.utils.Constants.Companion.MAX_ID_LENGTH
-import com.sopt.now.compose.utils.Constants.Companion.MIN_ID_LENGTH
-import com.sopt.now.compose.utils.Constants.Companion.MIN_PASSWORD_LENGTH
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
+import com.sopt.now.compose.utils.showToast
 
 class SignUpActivity : ComponentActivity() {
     private val signUpViewModel by viewModels<SignUpViewModel>()
@@ -55,16 +51,7 @@ class SignUpActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     showSignup(onSignupBtnClicked = { id, password, nickname, phone ->
-                        if (validateSignup(id, password, nickname, phone)) {
-                            signUp(
-                                RequestSignUpDto(
-                                    id.trim(),
-                                    password.trim(),
-                                    nickname.trim(),
-                                    phone.trim()
-                                )
-                            )
-                        }
+                        signUp(RequestSignUpDto(id, password, nickname, phone))
                     })
                     observeSignUp()
                 }
@@ -79,66 +66,18 @@ class SignUpActivity : ComponentActivity() {
     private fun observeSignUp() {
         signUpViewModel.status.observe(this) {
             if (it) {
-                showToast(R.string.success_signup)
+                showToast((R.string.success_signup).toString())
                 navigateToLogin()
+            } else {
+                showToast(signUpViewModel.errorMessage ?: "")
             }
         }
     }
 
     private fun navigateToLogin() {
-        Intent(this, LoginActivity::class.java).apply {
-            finish()
-        }
+        Intent(this, LoginActivity::class.java)
+        finish()
     }
-
-    private fun validateSignup(
-        id: String,
-        password: String,
-        nickname: String,
-        phone: String
-    ): Boolean =
-        validateId(id) && validatePassword(password) && validateNickname(nickname) && validatePhone(
-            phone
-        )
-
-    private fun validateId(id: String): Boolean {
-        require(id.length in MIN_ID_LENGTH..MAX_ID_LENGTH) {
-            showToast(R.string.fail_sign_up_id)
-            return false
-        }
-        return true
-    }
-
-    private fun validatePassword(password: String): Boolean {
-        require(
-            password.length >= MIN_PASSWORD_LENGTH && Regex("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\$@!%*#?&.])[A-Za-z[0-9]\$@!%*#?&.]{8,20}\$").matches(
-                password
-            )
-        ) {
-            showToast(R.string.fail_sign_up_password)
-            return false
-        }
-        return true
-    }
-
-    private fun validateNickname(nickname: String): Boolean {
-        require(nickname.trim().isNotEmpty()) {
-            showToast(R.string.fail_sign_up_nickname)
-            return false
-        }
-        return true
-    }
-
-    private fun validatePhone(phoneNumber: String): Boolean {
-        require(Regex("^010-\\d{4}-\\d{4}\$").matches(phoneNumber)) {
-            showToast(R.string.fail_sign_up_phone)
-            return false
-        }
-        return true
-    }
-
-    private fun showToast(message: Int) =
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
 @Composable

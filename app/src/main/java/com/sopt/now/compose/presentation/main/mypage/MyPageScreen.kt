@@ -1,6 +1,8 @@
 package com.sopt.now.compose.presentation.main.mypage
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,20 +15,39 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sopt.now.compose.ApplicationClass.SharedPreferences.sSharedPreferences
 import com.sopt.now.compose.R
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.tooling.preview.Preview
 import com.sopt.now.compose.model.userinfo.UserInfo
-import com.sopt.now.compose.utils.Constants.Companion.CODE_SUCCESS_200
+import com.sopt.now.compose.utils.Constants.Companion.MEMBER_ID
+
+//var userInfo = UserInfo("", "", "")
+//val myPageViewModel = MyPageViewModel()
 
 @Composable
-fun MyPageScreen( memberId: String?) {
-    val userInfo = getUserInfo(memberId)
+fun MyPageScreen() {
+    val context = LocalContext.current
+    //getUserInfo()
+    //observeGetInfo(context)
+
+    //
+    val myPageViewModel = MyPageViewModel()
+    myPageViewModel.getUserInfo()
+
+    var userInfo by remember { mutableStateOf<UserInfo?>(null) }
+    myPageViewModel.status.observe(LocalLifecycleOwner.current) {
+        if (it) {
+            userInfo = myPageViewModel.userInfo
+        } else {
+            //Toast.makeText(context, myPageViewModel.errorMessage, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -53,23 +74,24 @@ fun MyPageScreen( memberId: String?) {
     }
 }
 
-@Composable
-private fun getUserInfo(memberId: String?): UserInfo? {
-    var userInfo by remember { mutableStateOf<UserInfo?>(null) }
+/*@Composable
+private fun getUserInfo() {
+    myPageViewModel.getUserInfo()
+}
 
-    val myPageViewModel = MyPageViewModel()
-    myPageViewModel.getUserInfo(memberId!!)
-    myPageViewModel.userInfo.observe(LocalLifecycleOwner.current) {
-        try {
-            if (it.code == CODE_SUCCESS_200) {
-                userInfo = myPageViewModel.userInfo.value?.data
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+@Composable
+private fun observeGetInfo(context: Context): UserInfo? {
+    var userInfo by remember { mutableStateOf<UserInfo?>(null) }
+    myPageViewModel.status.observe(LocalLifecycleOwner.current) {
+        if (it) {
+            userInfo = myPageViewModel.userInfo
+        } else {
+            //Toast.makeText(context, myPageViewModel.errorMessage, Toast.LENGTH_SHORT).show()
         }
     }
     return userInfo
 }
+*/
 
 @Composable
 private fun customText(text: String, fontSize: Int) {

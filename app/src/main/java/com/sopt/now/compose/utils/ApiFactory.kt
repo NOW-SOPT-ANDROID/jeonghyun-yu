@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.sopt.now.compose.BuildConfig
 import com.sopt.now.compose.datasource.AuthService
 import com.sopt.now.compose.datasource.InfoService
+import com.sopt.now.compose.utils.ApiFactory.create
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -18,9 +19,11 @@ object ApiFactory {
         .readTimeout(5000, TimeUnit.MILLISECONDS)
         .connectTimeout(5000, TimeUnit.MILLISECONDS)
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        .addNetworkInterceptor(XAccessTokenInterceptor())
         .build()
 
     val retrofit: Retrofit by lazy {
+        val jsonConfig = Json { ignoreUnknownKeys = true } // 기존엔 없었음.
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
@@ -32,7 +35,7 @@ object ApiFactory {
 }
 
 object ServicePool {
-    val authService = ApiFactory.create<AuthService>()
-    val loginService = ApiFactory.create<AuthService>()
-    val infoService = ApiFactory.create<InfoService>()
+    val authService: AuthService by lazy { create<AuthService>() }
+    val loginService: AuthService by lazy { create<AuthService>() }
+    val infoService: InfoService by lazy { create<InfoService>() }
 }

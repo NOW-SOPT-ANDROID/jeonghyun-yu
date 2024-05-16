@@ -2,7 +2,6 @@ package com.sopt.now.compose.presentation.auth.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -33,14 +32,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sopt.now.compose.ApplicationClass.SharedPreferences.sSharedPreferences
 import com.sopt.now.compose.R
 import com.sopt.now.compose.model.login.RequestLoginDto
 import com.sopt.now.compose.presentation.auth.signup.SignUpActivity
 import com.sopt.now.compose.presentation.main.MainActivity
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
-import com.sopt.now.compose.utils.Constants.Companion.CODE_SUCCESS_200
 import com.sopt.now.compose.utils.Constants.Companion.MEMBER_ID
-import java.lang.Exception
+import com.sopt.now.compose.utils.showToast
 
 
 class LoginActivity : ComponentActivity() {
@@ -75,30 +74,22 @@ class LoginActivity : ComponentActivity() {
     }
 
     private fun observeLogin() {
-        loginViewModel.login.observe(this) {
-            try {
-                if (it.code == CODE_SUCCESS_200) {
-                    val memberId = loginViewModel.getMemberId()
-                    navigateToMain(memberId)
-                    showToast(memberId.toString())
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+        loginViewModel.status.observe(this) {
+            if (it) {
+                navigateToMain()
+                showToast(sSharedPreferences.getString(MEMBER_ID, null) ?: "")
+            } else showToast(loginViewModel.errorMessage ?: "")
         }
     }
-
-    private fun showToast(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
     private fun navigateToSignup() =
         Intent(this, SignUpActivity::class.java).apply { startActivity(this) }
 
-    private fun navigateToMain(memberId: String?) {
+    private fun navigateToMain() {
         Intent(this, MainActivity::class.java).apply {
-            putExtra(MEMBER_ID, memberId)
             startActivity(this)
-            finish()
         }
+        finish()
     }
 
 }

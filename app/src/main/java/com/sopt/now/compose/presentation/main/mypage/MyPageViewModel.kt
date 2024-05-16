@@ -1,39 +1,48 @@
 package com.sopt.now.compose.presentation.main.mypage
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sopt.now.compose.model.userinfo.ResponseGetInfoDto
 import com.sopt.now.compose.model.userinfo.UserInfo
+import com.sopt.now.compose.utils.NetworkUtil
 import com.sopt.now.compose.utils.ServicePool.infoService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class MyPageViewModel: ViewModel() {
-    private var _userInfo = MutableLiveData<ResponseGetInfoDto>()
-    var userInfo : MutableLiveData<ResponseGetInfoDto> = _userInfo
+class MyPageViewModel : ViewModel() {
+    private lateinit var _userInfo: UserInfo
+    val userInfo: UserInfo get() = _userInfo
 
-    fun getUserInfo(memberId: String) {
-        infoService.getUserInfo(memberId).enqueue(object: Callback<ResponseGetInfoDto> {
-            override fun onResponse(
-                call: Call<ResponseGetInfoDto>,
-                response: Response<ResponseGetInfoDto>
-            ) {
-                if (response.isSuccessful) {
-                    userInfo.postValue(response.body())
+    private val _status = MutableLiveData<Boolean>()
+    val status: LiveData<Boolean> get() = _status
+
+    private var _errorMessage: String? = null
+    val errorMessage: String? get() = _errorMessage
+
+    fun getUserInfo() {
+        viewModelScope.launch {
+            runCatching {
+                infoService.getUserInfo()
+            }.onSuccess {
+                Log.e("olivia data", it.body()?.data.toString())
+                /*if (it.isSuccessful) {
+                    _status.postValue(true)
+                    it.body()?.data.also { info ->
+                        if (info != null) _userInfo = info
+                    }
+
+                    Log.d("olivia data", it.body()?.data.toString())
                 } else {
-                    Log.d("error", response.message())
-                }
+                    _status.postValue(false)
+                    _errorMessage = it.errorBody()?.let { e ->
+                        NetworkUtil.getErrorResponse(e)?.message
+                    }
+                }*/
+            }.onFailure {
+                it.printStackTrace()
             }
-
-            override fun onFailure(call: Call<ResponseGetInfoDto>, t: Throwable) {
-                Log.d("server error", t.message.toString())
-            }
-
-        })
+        }
     }
 }
