@@ -27,27 +27,9 @@ import com.sopt.now.compose.R
 import com.sopt.now.compose.model.userinfo.UserInfo
 import com.sopt.now.compose.utils.Constants.Companion.MEMBER_ID
 
-//var userInfo = UserInfo("", "", "")
-//val myPageViewModel = MyPageViewModel()
-
 @Composable
 fun MyPageScreen() {
-    val context = LocalContext.current
-    //getUserInfo()
-    //observeGetInfo(context)
-
-    //
-    val myPageViewModel = MyPageViewModel()
-    myPageViewModel.getUserInfo()
-
-    var userInfo by remember { mutableStateOf<UserInfo?>(null) }
-    myPageViewModel.status.observe(LocalLifecycleOwner.current) {
-        if (it) {
-            userInfo = myPageViewModel.userInfo
-        } else {
-            //Toast.makeText(context, myPageViewModel.errorMessage, Toast.LENGTH_SHORT).show()
-        }
-    }
+    val userInfo = getUserInfo(LocalContext.current)
 
     Column(
         modifier = Modifier
@@ -74,24 +56,23 @@ fun MyPageScreen() {
     }
 }
 
-/*@Composable
-private fun getUserInfo() {
-    myPageViewModel.getUserInfo()
-}
-
 @Composable
-private fun observeGetInfo(context: Context): UserInfo? {
+private fun getUserInfo(context: Context): UserInfo? {
+    val myPageViewModel = MyPageViewModel()
+    myPageViewModel.getUserInfo()
+
     var userInfo by remember { mutableStateOf<UserInfo?>(null) }
     myPageViewModel.status.observe(LocalLifecycleOwner.current) {
         if (it) {
             userInfo = myPageViewModel.userInfo
         } else {
-            //Toast.makeText(context, myPageViewModel.errorMessage, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, myPageViewModel.errorMessage, Toast.LENGTH_SHORT).show()
         }
     }
     return userInfo
 }
-*/
+
+
 
 @Composable
 private fun customText(text: String, fontSize: Int) {

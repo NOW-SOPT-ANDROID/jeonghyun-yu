@@ -26,20 +26,17 @@ class MyPageViewModel : ViewModel() {
             runCatching {
                 infoService.getUserInfo()
             }.onSuccess {
-                Log.e("olivia data", it.body()?.data.toString())
-                /*if (it.isSuccessful) {
+                if (it.isSuccessful) {
                     _status.postValue(true)
                     it.body()?.data.also { info ->
                         if (info != null) _userInfo = info
                     }
-
-                    Log.d("olivia data", it.body()?.data.toString())
                 } else {
                     _status.postValue(false)
                     _errorMessage = it.errorBody()?.let { e ->
                         NetworkUtil.getErrorResponse(e)?.message
                     }
-                }*/
+                }
             }.onFailure {
                 it.printStackTrace()
             }

@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class BaseResponse<T> (
+data class BaseResponse<T> (
     @SerialName("code")
     val code: Int,
 
