@@ -6,16 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.sopt.now.ApplicationClass.SharedPreferences.sSharedPreferences
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.sopt.now.databinding.FragmentMypageBinding
 import com.sopt.now.model.info.UserInfo
-import com.sopt.now.utils.Constants.Companion.MEMBER_ID
-import com.sopt.now.utils.toast
+import com.sopt.now.utils.UiState
+import com.sopt.now.utils.showToast
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMypageBinding? = null
     private val binding get() = requireNotNull(_binding)
-    private var memberId: String? = null
     private val myPageViewModel by viewModels<MyPageViewModel>()
 
     override fun onCreateView(
@@ -30,9 +32,12 @@ class MyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        memberId = sSharedPreferences.getString(MEMBER_ID, null)
         getUserInfo()
         observeUserInfo()
+    }
+
+    private fun getUserInfo() {
+        myPageViewModel.getUserInfo()
     }
 
     override fun onDestroyView() {
@@ -40,18 +45,21 @@ class MyPageFragment : Fragment() {
         super.onDestroyView()
     }
 
-    private fun getUserInfo() {
-        memberId?.let { myPageViewModel.getUserInfo(it) }
-    }
-
     private fun observeUserInfo() {
-        myPageViewModel.status.observe(viewLifecycleOwner) {
-            if (it) {
+        myPageViewModel.state.flowWithLifecycle(lifecycle).onEach { state ->
+            when (state) {
+                is UiState.LOADING -> {}
+                is UiState.SUCCESS<*> -> { showUserInfo(state.data as UserInfo) }
+                is UiState.FAILURE -> { requireContext().showToast(state.errorMessage) }
+            }
+        }.launchIn(lifecycleScope)
+        /*myPageViewModel.status.observe(viewLifecycleOwner) { success ->
+            if (success) {
                 showUserInfo(myPageViewModel.userInfo)
             } else {
                 toast(myPageViewModel.errorMessage ?: "")
             }
-        }
+        }*/
     }
 
     private fun showUserInfo(data: UserInfo) {

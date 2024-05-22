@@ -3,10 +3,13 @@ package com.sopt.now.presentation.auth.signup
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.flowWithLifecycle
 import com.sopt.now.R
 import com.sopt.now.databinding.ActivitySignupBinding
 import com.sopt.now.model.signup.RequestSignUpDto
+import com.sopt.now.utils.UiState
 import com.sopt.now.utils.showToast
+import kotlinx.coroutines.flow.onEach
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -23,16 +26,17 @@ class SignupActivity : AppCompatActivity() {
     private fun signUp() = signUpViewModel.signUp(getSignUpRequestDto())
 
     private fun observeSignUp() {
-        signUpViewModel.status.observe(this) {
-            if (it) {
-                showToast((R.string.success_signup).toString())
-                backToLogin()
-            } else {
-                showToast(signUpViewModel.errorMessage ?: "")
+        signUpViewModel.state.flowWithLifecycle(lifecycle).onEach { state ->
+            when (state) {
+                is UiState.LOADING -> {}
+                is UiState.SUCCESS<*> -> {
+                    showToast(getString(R.string.success_signup))
+                    backToLogin()
+                }
+                is UiState.FAILURE -> { showToast(state.errorMessage) }
             }
         }
     }
-
 
     private fun backToLogin() {
         showToast(getString(R.string.success_signup))

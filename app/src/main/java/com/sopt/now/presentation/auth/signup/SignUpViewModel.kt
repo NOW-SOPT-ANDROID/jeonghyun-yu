@@ -7,26 +7,27 @@ import androidx.lifecycle.viewModelScope
 import com.sopt.now.model.signup.RequestSignUpDto
 import com.sopt.now.utils.NetworkUtil
 import com.sopt.now.utils.ServicePool.authService
+import com.sopt.now.utils.UiState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class SignUpViewModel : ViewModel() {
-    private val _status = MutableLiveData<Boolean>()
-    val status: LiveData<Boolean> get() = _status
-
-    private var _errorMessage: String? = null
-    val errorMessage: String? get() = _errorMessage
+    private val _state = MutableStateFlow<UiState>(UiState.LOADING)
+    val state: StateFlow<UiState> = _state
 
     fun signUp(data: RequestSignUpDto) {
         viewModelScope.launch(Dispatchers.IO) {
+            _state.value = UiState.LOADING
             runCatching {
                 authService.signUp(data)
             }.onSuccess {
-                if (it.isSuccessful) _status.postValue(true)
+                if (it.isSuccessful) _state.value = UiState.SUCCESS(null)
                 else {
-                    _status.postValue(false)
-                    _errorMessage = it.errorBody()
-                        ?.let { e -> NetworkUtil.getErrorResponse(e)?.message }
+                    _state.value = UiState.FAILURE(
+                        it.errorBody()?.let { e -> NetworkUtil.getErrorResponse(e)?.message }.toString()
+                    )
                 }
             }.onFailure {
                 it.printStackTrace()

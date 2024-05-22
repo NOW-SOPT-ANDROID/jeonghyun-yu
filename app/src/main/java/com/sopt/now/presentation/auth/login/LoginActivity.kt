@@ -2,15 +2,21 @@ package com.sopt.now.presentation.auth.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.sopt.now.ApplicationClass
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import com.sopt.now.ApplicationClass.SharedPreferences.sSharedPreferences
 import com.sopt.now.databinding.ActivityLoginBinding
 import com.sopt.now.model.login.RequestLoginDto
 import com.sopt.now.presentation.auth.signup.SignupActivity
 import com.sopt.now.presentation.main.MainActivity
 import com.sopt.now.utils.Constants.Companion.MEMBER_ID
+import com.sopt.now.utils.UiState
 import com.sopt.now.utils.showToast
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -34,19 +40,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun observeLogin() {
-        loginViewModel.status.observe(this) {
-            if (it) {
-                navigateToMain()
-                showToast(
-                    ApplicationClass.SharedPreferences.sSharedPreferences.getString(
-                        MEMBER_ID,
-                        null
-                    ) ?: ""
-                )
-            } else {
-                showToast(loginViewModel.errorMessage ?: "")
+        loginViewModel.state.flowWithLifecycle(lifecycle).onEach { state ->
+            when (state) {
+                is UiState.LOADING -> {}
+                is UiState.SUCCESS<*> -> {
+                    sSharedPreferences.getString(MEMBER_ID, null)?.let { showToast(it) }
+                    navigateToMain()
+                }
+                is UiState.FAILURE -> { showToast(state.errorMessage) }
             }
-        }
+        }.launchIn(lifecycleScope)
     }
 
     private fun getLoginData(): RequestLoginDto {
@@ -70,5 +73,4 @@ class LoginActivity : AppCompatActivity() {
         }
         finish()
     }
-
 }
