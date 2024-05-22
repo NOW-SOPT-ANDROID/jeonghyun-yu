@@ -1,21 +1,22 @@
 package com.sopt.now.presentation.main.mypage
 
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.sopt.now.ApplicationClass.SharedPreferences.sSharedPreferences
 import com.sopt.now.databinding.FragmentMypageBinding
-import com.sopt.now.model.SignUpData
-import com.sopt.now.utils.Constants.Companion.USER_DATA
+import com.sopt.now.model.info.UserInfo
+import com.sopt.now.utils.Constants.Companion.MEMBER_ID
+import com.sopt.now.utils.toast
 
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMypageBinding? = null
     private val binding get() = requireNotNull(_binding)
-    private var userData: SignUpData? = null
+    private var memberId: String? = null
+    private val myPageViewModel by viewModels<MyPageViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,12 +27,12 @@ class MyPageFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userData = getUserInfo()
-        showUserInfo()
+        memberId = sSharedPreferences.getString(MEMBER_ID, null)
+        getUserInfo()
+        observeUserInfo()
     }
 
     override fun onDestroyView() {
@@ -39,19 +40,25 @@ class MyPageFragment : Fragment() {
         super.onDestroyView()
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun getUserInfo(): SignUpData? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            arguments?.getParcelable(USER_DATA, SignUpData::class.java)
-        else arguments?.getParcelable(USER_DATA)
+    private fun getUserInfo() {
+        memberId?.let { myPageViewModel.getUserInfo(it) }
     }
 
-    private fun showUserInfo() {
+    private fun observeUserInfo() {
+        myPageViewModel.status.observe(viewLifecycleOwner) {
+            if (it) {
+                showUserInfo(myPageViewModel.userInfo)
+            } else {
+                toast(myPageViewModel.errorMessage ?: "")
+            }
+        }
+    }
+
+    private fun showUserInfo(data: UserInfo) {
         with(binding) {
-            tvMainUserNickname.text = userData?.nickname
-            tvMainUserMbti.text = userData?.mbti
-            tvMainUserId.text = userData?.id
-            tvMainUserPw.text = userData?.password
+            tvMainUserNickname.text = data.nickname
+            tvMainUserId.text = data.authenticationId
+            tvMainUserPhone.text = data.phone
         }
     }
 }

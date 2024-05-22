@@ -1,31 +1,24 @@
 package com.sopt.now.presentation.main
 
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.sopt.now.R
-import com.sopt.now.model.SignUpData
 import com.sopt.now.databinding.ActivityMainBinding
 import com.sopt.now.presentation.main.home.HomeFragment
 import com.sopt.now.presentation.main.mypage.MyPageFragment
 import com.sopt.now.presentation.main.search.SearchFragment
-import com.sopt.now.utils.Constants.Companion.USER_DATA
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var userData: SignUpData? = null
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(root) }
 
         clickBottomNavigation()
-        userData = getUserInfo()
     }
 
     private fun clickBottomNavigation() {
@@ -49,11 +42,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_mypage -> {
-                    replaceFragment(MyPageFragment().apply {
-                        arguments = Bundle().apply {
-                            putParcelable(USER_DATA, userData)
-                        }
-                    })
+                    replaceFragment(MyPageFragment())
                     true
                 }
 
@@ -67,12 +56,4 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.fcv_main, fragment)
             .commit()
     }
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun getUserInfo(): SignUpData? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            intent.getParcelableExtra(USER_DATA, SignUpData::class.java)
-        else intent.getParcelableExtra(USER_DATA)
-    }
-
 }

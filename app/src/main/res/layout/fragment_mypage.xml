@@ -21,28 +21,28 @@
         tools:text="유정현" />
 
     <TextView
-        android:id="@+id/tv_main_mbti"
+        android:id="@+id/tv_main_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="30dp"
         android:includeFontPadding="false"
-        android:text="@string/mbti"
+        android:text="@string/phone_number"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/tv_main_user_nickname" />
 
     <TextView
-        android:id="@+id/tv_main_user_mbti"
+        android:id="@+id/tv_main_user_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="10dp"
         android:includeFontPadding="false"
         android:textSize="15sp"
-        app:layout_constraintTop_toBottomOf="@id/tv_main_mbti"
-        tools:text="ESTJ" />
+        app:layout_constraintTop_toBottomOf="@id/tv_main_phone"
+        tools:text="010-1111-1111" />
 
     <TextView
         android:id="@+id/tv_main_id"
@@ -54,7 +54,7 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/tv_main_user_mbti" />
+        app:layout_constraintTop_toBottomOf="@id/tv_main_phone" />
 
     <TextView
         android:id="@+id/tv_main_user_id"
@@ -67,26 +67,4 @@
         app:layout_constraintTop_toBottomOf="@id/tv_main_id"
         tools:text="Olivia" />
 
-    <TextView
-        android:id="@+id/tv_main_pw"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="40dp"
-        android:text="@string/password"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/tv_main_user_id" />
-
-    <TextView
-        android:id="@+id/tv_main_user_pw"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="10dp"
-        android:includeFontPadding="false"
-        android:textSize="15sp"
-        app:layout_constraintTop_toBottomOf="@id/tv_main_pw"
-        tools:text="password" />
 </androidx.constraintlayout.widget.ConstraintLayout>

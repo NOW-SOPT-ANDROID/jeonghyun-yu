@@ -2,10 +2,9 @@ package com.sopt.now.presentation.main.home
 
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import coil.transform.CircleCropTransformation
 import coil.transform.RoundedCornersTransformation
-import com.sopt.now.model.Profile
 import com.sopt.now.databinding.ItemMyProfileBinding
+import com.sopt.now.model.Profile
 
 class MyProfileViewHolder(private val binding: ItemMyProfileBinding): RecyclerView.ViewHolder(binding.root) {
 
