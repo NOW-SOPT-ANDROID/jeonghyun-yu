@@ -53,13 +53,6 @@ class MyPageFragment : Fragment() {
                 is UiState.FAILURE -> { requireContext().showToast(state.errorMessage) }
             }
         }.launchIn(lifecycleScope)
-        /*myPageViewModel.status.observe(viewLifecycleOwner) { success ->
-            if (success) {
-                showUserInfo(myPageViewModel.userInfo)
-            } else {
-                toast(myPageViewModel.errorMessage ?: "")
-            }
-        }*/
     }
 
     private fun showUserInfo(data: UserInfo) {

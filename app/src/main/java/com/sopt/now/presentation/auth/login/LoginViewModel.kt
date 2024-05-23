@@ -13,11 +13,12 @@ import com.sopt.now.utils.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
     private val _state = MutableStateFlow<UiState>(UiState.LOADING)
-    val state: StateFlow<UiState> = _state
+    val state = _state.asStateFlow()
 
     fun postLogin(data: RequestLoginDto) {
         viewModelScope.launch(Dispatchers.IO) {
