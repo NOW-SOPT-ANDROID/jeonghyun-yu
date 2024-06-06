@@ -54,7 +54,7 @@ fun MyPage(userInfo: UserInfo) {
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            text = userInfo.nickname ?: "",
+            text = userInfo.nickname.orEmpty(),
             fontSize = 30.sp,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             fontWeight = FontWeight.Bold
@@ -62,11 +62,11 @@ fun MyPage(userInfo: UserInfo) {
 
         Spacer(modifier = Modifier.height(30.dp))
         CustomText(text = stringResource(R.string.phone_number), fontSize = 20)
-        CustomText(text = userInfo.phone ?: "", fontSize = 15)
+        CustomText(text = userInfo.phone.orEmpty(), fontSize = 15)
 
         Spacer(modifier = Modifier.height(30.dp))
         CustomText(text = stringResource(R.string.id), fontSize = 20)
-        CustomText(text = userInfo.authenticationId ?: "", fontSize = 15)
+        CustomText(text = userInfo.authenticationId.orEmpty(), fontSize = 15)
     }
 }
 
