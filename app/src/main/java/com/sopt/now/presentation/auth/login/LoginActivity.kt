@@ -13,6 +13,7 @@ import com.sopt.now.model.login.RequestLoginDto
 import com.sopt.now.presentation.auth.signup.SignupActivity
 import com.sopt.now.presentation.main.MainActivity
 import com.sopt.now.utils.Constants.Companion.MEMBER_ID
+import com.sopt.now.utils.LoginViewModelFactory
 import com.sopt.now.utils.UiState
 import com.sopt.now.utils.showToast
 import kotlinx.coroutines.flow.launchIn
@@ -20,7 +21,7 @@ import kotlinx.coroutines.flow.onEach
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
-    private val loginViewModel by viewModels<LoginViewModel>()
+    private val loginViewModel: LoginViewModel by viewModels { LoginViewModelFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
