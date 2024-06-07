@@ -19,6 +19,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +41,7 @@ import com.sopt.now.compose.presentation.auth.signup.SignUpActivity
 import com.sopt.now.compose.presentation.main.MainActivity
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 import com.sopt.now.compose.utils.Constants.Companion.MEMBER_ID
+import com.sopt.now.compose.utils.UiState
 import com.sopt.now.compose.utils.showToast
 
 
@@ -56,7 +59,7 @@ class LoginActivity : ComponentActivity() {
                 ) {
                     ShowLogin(
                         onLoginBtnClicked = { id, password ->
-                            login(RequestLoginDto(id, password))
+                            loginViewModel.postLogin(RequestLoginDto(id, password))
                         },
                         onSignupBtnClicked = {
                             navigateToSignup()
@@ -64,22 +67,24 @@ class LoginActivity : ComponentActivity() {
                     )
                 }
 
-                observeLogin()
+                LoginPage()
             }
         }
     }
 
-    private fun login(data: RequestLoginDto) {
-        loginViewModel.postLogin(data)
-    }
+    @Composable
+    fun LoginPage() {
+        val state by loginViewModel.state.collectAsState()
 
-    private fun observeLogin() {
-        loginViewModel.status.observe(this) {
-            if (it) {
-                navigateToMain()
+        when(state) {
+            is UiState.FAILURE -> showToast((state as UiState.FAILURE).errorMessage)
+            UiState.LOADING -> { }
+            is UiState.SUCCESS<*> -> {
                 showToast(sSharedPreferences.getString(MEMBER_ID, null) ?: "")
-            } else showToast(loginViewModel.errorMessage ?: "")
+                navigateToMain()
+            }
         }
+
     }
 
     private fun navigateToSignup() =

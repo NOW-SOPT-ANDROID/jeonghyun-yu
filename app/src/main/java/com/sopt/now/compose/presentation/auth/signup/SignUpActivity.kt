@@ -19,6 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,10 +33,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sopt.now.compose.ApplicationClass
 import com.sopt.now.compose.R
 import com.sopt.now.compose.model.signup.RequestSignUpDto
 import com.sopt.now.compose.presentation.auth.login.LoginActivity
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
+import com.sopt.now.compose.utils.Constants
+import com.sopt.now.compose.utils.UiState
 import com.sopt.now.compose.utils.showToast
 
 class SignUpActivity : ComponentActivity() {
@@ -51,25 +55,24 @@ class SignUpActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     showSignup(onSignupBtnClicked = { id, password, nickname, phone ->
-                        signUp(RequestSignUpDto(id, password, nickname, phone))
+                        signUpViewModel.signUp(RequestSignUpDto(id, password, nickname, phone))
                     })
-                    observeSignUp()
+
                 }
             }
         }
     }
 
-    private fun signUp(data: RequestSignUpDto) {
-        signUpViewModel.signUp(data)
-    }
+    @Composable
+    fun SignUpPage() {
+        val state by signUpViewModel.state.collectAsState()
 
-    private fun observeSignUp() {
-        signUpViewModel.status.observe(this) {
-            if (it) {
-                showToast((R.string.success_signup).toString())
+        when(state) {
+            is UiState.FAILURE -> showToast((state as UiState.FAILURE).errorMessage)
+            UiState.LOADING -> { }
+            is UiState.SUCCESS<*> -> {
+                showToast(getString(R.string.success_signup))
                 navigateToLogin()
-            } else {
-                showToast(signUpViewModel.errorMessage ?: "")
             }
         }
     }
