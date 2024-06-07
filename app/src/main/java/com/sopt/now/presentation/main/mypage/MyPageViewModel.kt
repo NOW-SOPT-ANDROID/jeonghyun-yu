@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class MyPageViewModel : ViewModel() {
-    private val _state = MutableStateFlow<UiState>(UiState.LOADING)
-    val state = _state.asStateFlow()
+    private val _state = MutableStateFlow<UiState<UserInfo>>(UiState.LOADING)
+    val state get() = _state.asStateFlow()
 
     fun getUserInfo() {
         _state.value = UiState.LOADING
@@ -25,7 +25,7 @@ class MyPageViewModel : ViewModel() {
                 infoService.getUserInfo()
             }.onSuccess {
                 if (it.isSuccessful) {
-                    _state.value = UiState.SUCCESS<UserInfo>(
+                    _state.value = UiState.SUCCESS(
                         it.body()?.data
                     )
                 } else {

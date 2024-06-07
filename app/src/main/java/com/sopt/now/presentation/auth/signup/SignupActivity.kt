@@ -4,11 +4,13 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.sopt.now.R
 import com.sopt.now.databinding.ActivitySignupBinding
 import com.sopt.now.model.signup.RequestSignUpDto
 import com.sopt.now.utils.UiState
 import com.sopt.now.utils.showToast
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class SignupActivity : AppCompatActivity() {
@@ -29,13 +31,13 @@ class SignupActivity : AppCompatActivity() {
         signUpViewModel.state.flowWithLifecycle(lifecycle).onEach { state ->
             when (state) {
                 is UiState.LOADING -> {}
-                is UiState.SUCCESS<*> -> {
+                is UiState.SUCCESS -> {
                     showToast(getString(R.string.success_signup))
                     backToLogin()
                 }
                 is UiState.FAILURE -> { showToast(state.errorMessage) }
             }
-        }
+        }.launchIn(lifecycleScope)
     }
 
     private fun backToLogin() {

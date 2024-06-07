@@ -1,12 +1,12 @@
 package com.sopt.now.utils
 
-sealed class UiState {
-    data object LOADING : UiState()
+sealed class UiState<out T> {
+    data object LOADING : UiState<Nothing>()
     data class SUCCESS<T>(
         val data: T? = null
-    ) : UiState()
+    ) : UiState<T>()
 
     data class FAILURE(
         val errorMessage: String
-    ) : UiState()
+    ) : UiState<Nothing>()
 }

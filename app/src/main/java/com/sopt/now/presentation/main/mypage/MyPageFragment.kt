@@ -46,13 +46,15 @@ class MyPageFragment : Fragment() {
     }
 
     private fun observeUserInfo() {
-        myPageViewModel.state.flowWithLifecycle(lifecycle).onEach { state ->
+        myPageViewModel.state.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach { state ->
             when (state) {
                 is UiState.LOADING -> {}
-                is UiState.SUCCESS<*> -> { showUserInfo(state.data as UserInfo) }
+                is UiState.SUCCESS -> {
+                    state.data?.let { showUserInfo(it) }
+                }
                 is UiState.FAILURE -> { requireContext().showToast(state.errorMessage) }
             }
-        }.launchIn(lifecycleScope)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun showUserInfo(data: UserInfo) {

@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.state.flowWithLifecycle(lifecycle).onEach { state ->
             when (state) {
                 is UiState.LOADING -> {}
-                is UiState.SUCCESS<*> -> {
+                is UiState.SUCCESS -> {
                     sSharedPreferences.getString(MEMBER_ID, null)?.let { showToast(it) }
                     navigateToMain()
                 }
