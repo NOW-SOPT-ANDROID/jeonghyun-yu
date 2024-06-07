@@ -10,6 +10,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.sopt.now.databinding.FragmentMypageBinding
 import com.sopt.now.model.info.UserInfo
+import com.sopt.now.repository.MyPageViewModelFactory
 import com.sopt.now.utils.UiState
 import com.sopt.now.utils.showToast
 import kotlinx.coroutines.flow.launchIn
@@ -18,7 +19,7 @@ import kotlinx.coroutines.flow.onEach
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMypageBinding? = null
     private val binding get() = requireNotNull(_binding)
-    private val myPageViewModel by viewModels<MyPageViewModel>()
+    private val myPageViewModel: MyPageViewModel by viewModels { MyPageViewModelFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,

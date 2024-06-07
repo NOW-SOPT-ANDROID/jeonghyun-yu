@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sopt.now.model.signup.RequestSignUpDto
+import com.sopt.now.repository.AuthRepository
 import com.sopt.now.utils.NetworkUtil
 import com.sopt.now.utils.ServicePool.authService
 import com.sopt.now.utils.UiState
@@ -14,7 +15,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SignUpViewModel : ViewModel() {
+class SignUpViewModel(
+    private val authRepository: AuthRepository
+) : ViewModel() {
     private val _state = MutableStateFlow<UiState<Unit>>(UiState.LOADING)
     val state = _state.asStateFlow()
 
@@ -22,7 +25,7 @@ class SignUpViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             _state.value = UiState.LOADING
             runCatching {
-                authService.signUp(data)
+                authRepository.signupUser(data)
             }.onSuccess {
                 if (it.isSuccessful) _state.value = UiState.SUCCESS(null)
                 else {

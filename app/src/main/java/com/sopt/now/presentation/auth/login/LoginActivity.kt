@@ -2,7 +2,6 @@ package com.sopt.now.presentation.auth.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
@@ -13,7 +12,7 @@ import com.sopt.now.model.login.RequestLoginDto
 import com.sopt.now.presentation.auth.signup.SignupActivity
 import com.sopt.now.presentation.main.MainActivity
 import com.sopt.now.utils.Constants.Companion.MEMBER_ID
-import com.sopt.now.utils.LoginViewModelFactory
+import com.sopt.now.repository.LoginViewModelFactory
 import com.sopt.now.utils.UiState
 import com.sopt.now.utils.showToast
 import kotlinx.coroutines.flow.launchIn

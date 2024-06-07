@@ -13,4 +13,8 @@ class AuthRepositoryImpl(
     override suspend fun loginUser(data: RequestLoginDto): Response<BaseResponse<Unit>> {
         return authService.login(data)
     }
+
+    override suspend fun signupUser(data: RequestSignUpDto): Response<BaseResponse<Unit>> {
+        return authService.signUp(data)
+    }
 }
