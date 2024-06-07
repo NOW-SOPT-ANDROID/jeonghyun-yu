@@ -7,42 +7,35 @@ import androidx.lifecycle.viewModelScope
 import com.sopt.now.model.info.UserInfo
 import com.sopt.now.utils.NetworkUtil
 import com.sopt.now.utils.ServicePool.infoService
+import com.sopt.now.utils.UiState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class MyPageViewModel : ViewModel() {
-    private lateinit var _userInfo: UserInfo
-    val userInfo: UserInfo get() = _userInfo
+    private val _state = MutableStateFlow<UiState<UserInfo>>(UiState.LOADING)
+    val state get() = _state.asStateFlow()
 
-    private val _status = MutableLiveData<Boolean>()
-    val status: LiveData<Boolean> get() = _status
-
-
-    private var _errorMessage: String? = null
-    val errorMessage: String? get() = _errorMessage
-
-    fun getUserInfo(memberId: String) {
+    fun getUserInfo() {
+        _state.value = UiState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 infoService.getUserInfo()
             }.onSuccess {
                 if (it.isSuccessful) {
-                    _status.postValue(true)
-                    it.body()?.data.also { info ->
-                        if (info != null) {
-                            _userInfo = info
-                        }
-                    }
+                    _state.value = UiState.SUCCESS(
+                        it.body()?.data
+                    )
                 } else {
-                    _status.postValue(false)
-                    _errorMessage = it.errorBody()
-                        ?.let { e -> NetworkUtil.getErrorResponse(e)?.message }
+                    _state.value = UiState.FAILURE(
+                        it.errorBody()?.let { e -> NetworkUtil.getErrorResponse(e)?.message }.toString()
+                    )
                 }
             }.onFailure {
                 it.printStackTrace()
             }
-
         }
     }
-
 }
