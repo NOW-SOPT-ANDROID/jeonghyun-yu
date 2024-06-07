@@ -10,12 +10,14 @@ import com.sopt.now.databinding.ActivitySignupBinding
 import com.sopt.now.model.signup.RequestSignUpDto
 import com.sopt.now.utils.UiState
 import com.sopt.now.utils.showToast
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
-    private val signUpViewModel by viewModels<SignUpViewModel>()
+    private val signUpViewModel: SignUpViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

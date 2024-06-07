@@ -8,8 +8,9 @@ import com.sopt.now.databinding.ActivityMainBinding
 import com.sopt.now.presentation.main.home.HomeFragment
 import com.sopt.now.presentation.main.mypage.MyPageFragment
 import com.sopt.now.presentation.main.search.SearchFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 

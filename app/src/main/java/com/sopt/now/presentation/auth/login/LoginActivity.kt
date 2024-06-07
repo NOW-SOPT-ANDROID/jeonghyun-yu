@@ -12,15 +12,16 @@ import com.sopt.now.model.login.RequestLoginDto
 import com.sopt.now.presentation.auth.signup.SignupActivity
 import com.sopt.now.presentation.main.MainActivity
 import com.sopt.now.utils.Constants.Companion.MEMBER_ID
-import com.sopt.now.repository.LoginViewModelFactory
 import com.sopt.now.utils.UiState
 import com.sopt.now.utils.showToast
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
-    private val loginViewModel: LoginViewModel by viewModels { LoginViewModelFactory() }
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

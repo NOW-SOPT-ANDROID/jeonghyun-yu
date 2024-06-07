@@ -8,12 +8,16 @@ import com.sopt.now.repository.AuthRepository
 import com.sopt.now.utils.Constants.Companion.MEMBER_ID
 import com.sopt.now.utils.NetworkUtil
 import com.sopt.now.utils.UiState
+import dagger.hilt.android.HiltAndroidApp
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow<UiState<Unit>>(UiState.LOADING)
