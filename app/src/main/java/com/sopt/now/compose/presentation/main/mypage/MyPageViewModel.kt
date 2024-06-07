@@ -2,6 +2,7 @@ package com.sopt.now.compose.presentation.main.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sopt.now.compose.model.userinfo.UserInfo
 import com.sopt.now.compose.utils.NetworkUtil
 import com.sopt.now.compose.utils.ServicePool.infoService
 import com.sopt.now.compose.utils.UiState
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class MyPageViewModel : ViewModel() {
-    private val _state = MutableStateFlow<UiState>(UiState.LOADING)
+    private val _state = MutableStateFlow<UiState<UserInfo>>(UiState.LOADING)
     val state = _state.asStateFlow()
 
     fun getUserInfo() {

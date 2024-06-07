@@ -39,7 +39,7 @@ fun MyPageScreen(
             Toast.makeText(context, (state as UiState.FAILURE).errorMessage, Toast.LENGTH_SHORT).show()
         }
         UiState.LOADING -> { }
-        is UiState.SUCCESS<*> -> {
+        is UiState.SUCCESS -> {
             MyPage((state as UiState.SUCCESS<*>).data as UserInfo)
         }
     }

@@ -19,7 +19,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sopt.now.compose.ApplicationClass.SharedPreferences.sSharedPreferences
 import com.sopt.now.compose.R
+import com.sopt.now.compose.data.LoginViewModelFactory
 import com.sopt.now.compose.model.login.RequestLoginDto
 import com.sopt.now.compose.presentation.auth.signup.SignUpActivity
 import com.sopt.now.compose.presentation.main.MainActivity
@@ -46,7 +46,7 @@ import com.sopt.now.compose.utils.showToast
 
 
 class LoginActivity : ComponentActivity() {
-    private val loginViewModel by viewModels<LoginViewModel>()
+    private val loginViewModel: LoginViewModel by viewModels { LoginViewModelFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +79,7 @@ class LoginActivity : ComponentActivity() {
         when(state) {
             is UiState.FAILURE -> showToast((state as UiState.FAILURE).errorMessage)
             UiState.LOADING -> { }
-            is UiState.SUCCESS<*> -> {
+            is UiState.SUCCESS -> {
                 showToast(sSharedPreferences.getString(MEMBER_ID, null) ?: "")
                 navigateToMain()
             }
