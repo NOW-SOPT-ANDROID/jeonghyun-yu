@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sopt.now.compose.ApplicationClass
 import com.sopt.now.compose.R
+import com.sopt.now.compose.data.SignUpViewModelFactory
 import com.sopt.now.compose.model.signup.RequestSignUpDto
 import com.sopt.now.compose.presentation.auth.login.LoginActivity
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
@@ -43,7 +44,7 @@ import com.sopt.now.compose.utils.UiState
 import com.sopt.now.compose.utils.showToast
 
 class SignUpActivity : ComponentActivity() {
-    private val signUpViewModel by viewModels<SignUpViewModel>()
+    private val signUpViewModel: SignUpViewModel by viewModels { SignUpViewModelFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,9 +68,9 @@ class SignUpActivity : ComponentActivity() {
     fun SignUpPage() {
         val state by signUpViewModel.state.collectAsState()
 
-        when(state) {
+        when (state) {
             is UiState.FAILURE -> showToast((state as UiState.FAILURE).errorMessage)
-            UiState.LOADING -> { }
+            UiState.LOADING -> {}
             is UiState.SUCCESS<*> -> {
                 showToast(getString(R.string.success_signup))
                 navigateToLogin()

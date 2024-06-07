@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sopt.now.compose.ApplicationClass.SharedPreferences.editor
 import com.sopt.now.compose.model.login.RequestLoginDto
+import com.sopt.now.compose.repository.AuthRepository
 import com.sopt.now.compose.utils.Constants.Companion.MEMBER_ID
 import com.sopt.now.compose.utils.NetworkUtil
 import com.sopt.now.compose.utils.ServicePool.loginService
@@ -13,7 +14,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(
+    private val authRepository: AuthRepository
+) : ViewModel() {
     private val _state = MutableStateFlow<UiState>(UiState.LOADING)
     val state = _state.asStateFlow()
 
@@ -21,7 +24,7 @@ class LoginViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             _state.value = UiState.LOADING
             runCatching {
-                loginService.login(data)
+                authRepository.loginUser(data)
             }.onSuccess {
                 if (it.isSuccessful) {
                     editor.putString(MEMBER_ID, it.headers()["location"])
