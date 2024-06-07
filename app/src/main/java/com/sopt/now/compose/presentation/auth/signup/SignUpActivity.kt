@@ -71,7 +71,7 @@ class SignUpActivity : ComponentActivity() {
         when (state) {
             is UiState.FAILURE -> showToast((state as UiState.FAILURE).errorMessage)
             UiState.LOADING -> {}
-            is UiState.SUCCESS<*> -> {
+            is UiState.SUCCESS -> {
                 showToast(getString(R.string.success_signup))
                 navigateToLogin()
             }

@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
-    private val _state = MutableStateFlow<UiState>(UiState.LOADING)
+    private val _state = MutableStateFlow<UiState<Unit>>(UiState.LOADING)
     val state = _state.asStateFlow()
 
     fun postLogin(data: RequestLoginDto) {
