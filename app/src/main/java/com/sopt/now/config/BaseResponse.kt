@@ -1,4 +1,4 @@
-package com.sopt.now.utils
+package com.sopt.now.config
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

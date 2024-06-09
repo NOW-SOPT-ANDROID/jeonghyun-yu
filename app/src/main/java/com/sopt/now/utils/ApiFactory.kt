@@ -2,9 +2,9 @@ package com.sopt.now.utils
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.sopt.now.BuildConfig
+import com.sopt.now.config.XAccessTokenInterceptor
 import com.sopt.now.datasource.AuthService
 import com.sopt.now.datasource.InfoService
-import com.sopt.now.utils.ApiFactory.create
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

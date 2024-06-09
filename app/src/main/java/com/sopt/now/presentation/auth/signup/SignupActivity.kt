@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.sopt.now.R
+import com.sopt.now.config.BaseActivity
 import com.sopt.now.databinding.ActivitySignupBinding
 import com.sopt.now.model.signup.RequestSignUpDto
 import com.sopt.now.utils.UiState
@@ -15,14 +16,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
-class SignupActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySignupBinding
+class SignupActivity : BaseActivity<ActivitySignupBinding>(ActivitySignupBinding::inflate) {
     private val signUpViewModel: SignUpViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivitySignupBinding.inflate(layoutInflater).apply { setContentView(root) }
         binding.btnSignup.setOnClickListener { signUp() }
         observeSignUp()
     }

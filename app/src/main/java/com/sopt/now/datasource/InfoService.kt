@@ -1,7 +1,7 @@
 package com.sopt.now.datasource
 
 import com.sopt.now.model.info.UserInfo
-import com.sopt.now.utils.BaseResponse
+import com.sopt.now.config.BaseResponse
 import retrofit2.Response
 import retrofit2.http.GET
 

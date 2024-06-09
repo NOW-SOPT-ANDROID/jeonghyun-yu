@@ -2,7 +2,7 @@ package com.sopt.now.datasource
 
 import com.sopt.now.model.login.RequestLoginDto
 import com.sopt.now.model.signup.RequestSignUpDto
-import com.sopt.now.utils.BaseResponse
+import com.sopt.now.config.BaseResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
