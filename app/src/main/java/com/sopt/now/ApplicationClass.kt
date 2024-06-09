@@ -3,7 +3,9 @@ package com.sopt.now
 import android.app.Application
 import com.sopt.now.ApplicationClass.SharedPreferences.editor
 import com.sopt.now.ApplicationClass.SharedPreferences.sSharedPreferences
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class ApplicationClass: Application() {
     object SharedPreferences {
         lateinit var sSharedPreferences: android.content.SharedPreferences

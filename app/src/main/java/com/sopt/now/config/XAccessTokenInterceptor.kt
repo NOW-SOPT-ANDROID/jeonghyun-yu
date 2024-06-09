@@ -1,4 +1,4 @@
-package com.sopt.now.utils
+package com.sopt.now.config
 
 import com.sopt.now.ApplicationClass.SharedPreferences.sSharedPreferences
 import com.sopt.now.utils.Constants.Companion.MEMBER_ID

@@ -2,12 +2,12 @@ package com.sopt.now.presentation.auth.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.sopt.now.ApplicationClass.SharedPreferences.sSharedPreferences
+import com.sopt.now.config.BaseActivity
 import com.sopt.now.databinding.ActivityLoginBinding
 import com.sopt.now.model.login.RequestLoginDto
 import com.sopt.now.presentation.auth.signup.SignupActivity
@@ -15,17 +15,16 @@ import com.sopt.now.presentation.main.MainActivity
 import com.sopt.now.utils.Constants.Companion.MEMBER_ID
 import com.sopt.now.utils.UiState
 import com.sopt.now.utils.showToast
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class LoginActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityLoginBinding
-    private val loginViewModel by viewModels<LoginViewModel>()
+@AndroidEntryPoint
+class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate) {
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityLoginBinding.inflate(layoutInflater).apply { setContentView(root) }
 
         with(binding) {
             btnSignup.setOnClickListener { navigateToSignup() }

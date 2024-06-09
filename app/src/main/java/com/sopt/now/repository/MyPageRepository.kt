@@ -1,11 +1,9 @@
-package com.sopt.now.datasource
+package com.sopt.now.repository
 
 import com.sopt.now.model.info.UserInfo
 import com.sopt.now.config.BaseResponse
 import retrofit2.Response
-import retrofit2.http.GET
 
-interface InfoService {
-    @GET("member/info")
+interface MyPageRepository {
     suspend fun getUserInfo(): Response<BaseResponse<UserInfo>>
 }
