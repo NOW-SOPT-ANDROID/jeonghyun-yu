@@ -12,6 +12,7 @@ import com.sopt.now.databinding.FragmentHomeBinding
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind, R.layout.fragment_home) {
     private val viewModel by viewModels<HomeViewModel>()
+    private lateinit var profileAdapter: ProfileAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -20,8 +21,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
     }
 
     private fun initRecyclerView() {
-        val friendAdapter = ProfileAdapter()
-        binding.rvFriend.adapter = friendAdapter
-        friendAdapter.setFriendList(viewModel.mockFriendList)
+        profileAdapter = ProfileAdapter(requireContext())
+        binding.rvFriend.adapter = profileAdapter
+        profileAdapter.submitList(viewModel.mockFriendList)
+
     }
 }
